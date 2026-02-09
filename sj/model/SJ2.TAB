@@ -1,0 +1,96 @@
+! Stylized Johansen Model - Version 2 - Feb 2026 !
+
+! Excerpt 1 of TABLO input file: !
+! Sets and flows data!
+
+Set  ! User categories: IO table columns !
+    IND # Industries #  (s1, s2); ! subscript i !
+    FINALUSER # Final demanders # (Households);
+    USER # All users # = IND union FINALUSER; ! subscript u !
+
+Set  ! Input categories: IO table rows !
+    COM # Commodities # (s1, s2); ! subscript c !
+    FAC # Primary factors # (labor, capital); ! subscript f !
+
+Subset COM is subset of IND;
+
+Coefficient
+    (all,c,COM)(all,u,USER) USE(c,u) # USE matrix #;
+    (all,f,FAC)(all,i,IND) FACTOR(f,i) # Wages and rental price #;
+
+File BASEDATA # Flows Data File #;
+Read
+    USE from file BASEDATA header "USE";
+    FACTOR from file BASEDATA header "1FAC";
+
+! Excerpt 3 of TABLO input file: !
+! Equations !
+
+Coefficient
+    (all,i,IND) INDSHR
+
+    (all,c,COM) SALESCOM(c) # Total sales of commodity c #;
+    (all,f,FAC) SALESFAC(f) # Total sales of factor f #;
+    (all,c,COM)(all,u,USER) COMSHR(c,u) 
+    # Share of using commodity c to total sales of commodity #;
+    (all,f,COM)(all,u,USER) FACSHR(f,i) 
+    # Share of using factor f to total sales of factor #;
+    
+
+
+Coefficient (parameter)
+    (all,c,COM)(all,i,IND) ALPHACOM(c,i) 
+    # Elasticity of output for commodity c of each industry i #;
+    (all,f,FAC)(all,i,IND) ALPHAFAC(f,i) 
+    # Elasticity of output for factor f of each industry i #;
+
+Formula 
+    (all,i,IND) 
+    (all,c,COM) SALESCOM(c) = SUM{u, USER, USE(c,u)};
+    (all,f,FAC) SALESFAC(f) = SUM{i, IND, FACTOR(f,i)}
+    (all,c,COM)(all,i,IND) ALPHACOM(c,i) = USE(c,i) / SALESCOM(c);
+    (all,f,FAC)(all,i,IND) ALPHAFAC(f,i) = FACTOR(f,i) / SALESFAC(f);
+    (all,c,COM)(all,u,USER) COMSHR(c,u) = USE(c,u) / SALESCOM(c);
+    (all,f,FAC)(all,i,IND) FACSHR(f,i) = FACTOR(f,i) / SALESFAC(f);
+
+    
+
+Variable
+    y # Total household expenditure #;
+    (all,c,COM) pc(c) # Price of commodity c #;
+    (all,f,FAC) pf(f) # Price of primary factor f #;
+    (all,c,COM)(all,u,USER) xc(c,u) # Demand of commodity c of user u #;
+    (all,f,FAC)(all,i,IND) xf(f,i) # Demand of factor f of industry i #;
+    (all,c,COM) xc_u(c) # Total demand of commodity c #;
+    (all,f,FAC) xf_i(f) # Total demand of factor f #;
+
+    (all,u,USER) xc_c(u) # Total commodity demand of user u #
+    (all,i,IND) xf_f(i) # Total factor demand of user u #
+
+    (all,u,USER) ptot(u) # Total cost of user u #
+
+Equation E_xca # Household demand functions #
+    (all,c,COM) xc(c,"Households") = y - pc(c);
+
+Equation E_xcb # Industry demand for commodity functions # 
+    (all,c,COM)(all,i,IND) xc(c,i) = xc_c(i) - (pc(c) - ptot(i))
+
+Equation E_xf # Industry demand for factor functions #
+    (all,f,FAC)(all,i,IND) xf(f,i) = xf_f(i) - (pf(f) - ptot(i));
+
+Equation E_ptot # Total cost of industry i #
+    (all,i,IND) ptot(i) = SUM{c,COM, ALPHA(c, i) * p(c)} 
+        + SUM{f,FAC, ALPHA(f, i) * p1fac(f)} 
+
+Equation E_x1tot # Total demand for good c #
+    (all,c,COM) x1tot(c) = SUM{u, USER, x(c,u) * BETA(c,u)}
+
+Equation E_x1fac()
+    (all,f,FAC) x1fac(f) = SUM{i, IND, x1f(f,i) * BETAFAC(f,i)}
+
+Equation E_ps1 # Numeraire # 
+    p("s1") = 0;
+
+  
+
+

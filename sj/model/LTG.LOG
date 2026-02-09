@@ -1,0 +1,30 @@
+LTG command line: C:\GP\ltg.bat SJ
+
+[C:\GP\gptask.exe]
+[GPTASK 15 August 2011. Parameters: gfortran SJ ]
+
+GNU Fortran (x86_64-posix-seh-rev0, Built by MinGW-W64 project) 6.4.0
+Copyright (C) 2017 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Running up to 8 compiles at once, with each compile doing up to 3 files.
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "sj_c1.for" "sj_u1.for" "sj_v1.for"
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "sj_c3.for" "sj_c5.for" "sj_c6.for"
+Launched slot 2: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "sj_u3.for" "sj_u5.for" "sj_u6.for"
+Launched slot 3: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "sj_v3.for" "sj_v5.for" "sj_v6.for"
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "sj_c0.for" "sj_u0.for" "sj_v0.for"
+Launched slot 2: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "sj__2.for"
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "sj_m0.for"
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "sj__1.for"
+Finished OK 31.8 seconds 8 separate tasks
+
+G:\My Drive\My Training\ADB Courses\Computable General Equilibrium\cge\sj>gfortran  @optgf_3 @gfortran_link_ltg.fig -Wl,--start-group -lgpa -lgpb -ltbgdum -lmodlib -lgs -Wl,--end-group -L"C:\GP" -L.\ -lopenblas -lgomp -lpthread -o SJ.exe 
+[C:\GP\gptask.exe]
+[GPTASK 15 August 2011. Parameters: cleangf SJ deletefor]
+start time = 09:02:27.17       end time = 09:03:35.92             
+
+
+SJ.EXE made successfully
+
+

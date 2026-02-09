@@ -1,0 +1,442 @@
+#FILES
+Logical Name         In/Out Ud  Type Actual Name
+BASEDATA              In     y  HAR
+ Flows Data File
+SUMMARY               Out    n  HAR
+ output file for summary data
+(Display)             Out    n  DIS
+(Solution)            Out    y  SL4
+(Equations)           Out    y  EQ4
+#TABFILE
+minimal.tab
+#TMDATE
+at 10:21:46 on 05-FEB-2026
+#STIFILE
+%none
+#SETS
+    9
+    1 IND                  7  k Industries
+AgricMining 
+Manufacture 
+Utilities   
+Construction
+TradeTranspt
+FinanProprty
+Services    
+    2 FINALUSER            4  k Final demanders
+Investment  
+Households  
+Government  
+Exports     
+    3 USER                11  k All users
+AgricMining 
+Manufacture 
+Utilities   
+Construction
+TradeTranspt
+FinanProprty
+Services    
+Investment  
+Households  
+Government  
+Exports     
+    4 IMPUSER             10  k Non-export demanders: users of imports
+AgricMining 
+Manufacture 
+Utilities   
+Construction
+TradeTranspt
+FinanProprty
+Services    
+Investment  
+Households  
+Government  
+    5 COM                  7  k Commodities
+AgricMining 
+Manufacture 
+Utilities   
+Construction
+TradeTranspt
+FinanProprty
+Services    
+    6 SRC                  2  k Source of commodities
+dom         
+imp         
+    7 FAC                  2  k Primary factors
+Labour      
+Capital     
+    8 COSTCAT              4  k cost categories
+dom         
+imp         
+Labour      
+Capital     
+    9 MAINUSER             5  k broad user groups
+Intermediate
+Investment  
+Households  
+Government  
+Exports     
+#VARIABLES
+        34
+    1 x                      154     3 ? Demand by user u for good c, source s
+    5    6    3
+    2 x0                      14     2 ? Total demand for good c, source s
+    5    6
+    3 p                       14     2 ? User price of good c, source s
+    5    6
+    4 p_s                     70     2 ? User price of composite good c
+    5    4
+    5 x_s                     70     2 ? Use of composite good c
+    5    4
+    6 x1prim                   7     1 ? Industry demand for primary-factor composite
+    1
+    7 p1prim                   7     1 ? Price of primary factor composite
+    1
+    8 x1lab                    7     1 ? Employment by industry
+    1
+    9 p1lab                    1     0 ? Economy-wide wage rate
+   10 x1cap                    7     1 ? Current capital stock
+    1
+   11 p1cap                    7     1 ? Rental price of capital
+    1
+   12 x1tot                    7     1 ? Industry output
+    1
+   13 a1prim                   7     1 ? All primary-factor augmenting technical change
+    1
+   14 p1tot                    7     1 ? Unit cost of production
+    1
+   15 p3tot                    1     0 ? Consumer price index
+   16 x3tot                    1     0 ? Real household consumption
+   17 w3tot                    1     0 ? Nominal total household consumption
+   18 pworld                   7     1 ? World prices, measured in foreign currency
+    5
+   19 f4q                      7     1 ? Quantity shift in foreign demand
+    5
+   20 phi                      1     0 ? Exchange rate, (local $)/(foreign $)
+   21 Delptxrate               7     1 ? Ordinary change in rate of domestic tax
+    5
+   22 Delmtxrate               7     1 ? Ordinary change in rate of import tax
+    5
+   23 w0gdpinc                 1     0 ? Nominal GDP from income side
+   24 w0gdpexp                 1     0 ? Nominal GDP from expenditure side
+   25 p0gdpexp                 1     0 ? GDP price index, expenditure side
+   26 x0gdpexp                 1     0 ? Real GDP from expenditure side
+   27 x4tot                    1     0 ? Export volume index
+   28 p4tot                    1     0 ? Export price index
+   29 p2tot                    1     0 ? Investment price index
+   30 x0cif_c                  1     0 ? Import volume index, CIF prices
+   31 delB                     1     0 ? (Balance of trade)/GDP
+   32 realwage                 1     0 ? Wage rate deflated by CPI
+   33 employ                   1     0 ? Aggregate employment
+   34 gret                     7     1 ? Gross rate of return
+    1
+#VCSTAT
+cccccccccccccccccccccccccccccccccc
+#VCTP
+ppppppppppppppppppppccppppppppcppp
+#SUBSETS
+     9
+     1     1     3
+     2     2     3
+     3     4     3
+     4     1     4
+     5     5     1
+     6     5     3
+     7     6     8
+     8     7     8
+     9     2     9
+#COEFFICIENTS
+   21
+    1 USE             3 r y y  USE matrix
+    5    6    3
+    2 FACTOR          2 r y y  Wages and profits
+    7    1
+    3 V1PTX           1 r y y  Production tax revenue
+    1
+    4 V0MTX           1 r y y  import tax revenue
+    5
+    5 USE_S           2 r n n  USE matrix, dom+imp together
+    5    3
+    6 USE_CS          1 r n n  Total user expenditure on goods
+    3
+    7 SALES           2 r n n  Total value of sales
+    5    6
+    8 V1PRIM          1 r n n  Wages plus profits
+    1
+    9 V1TOT           1 r n n  Industry Costs
+    1
+   10 V0CIF           1 r n n  Aggregate imports at border prices
+    5
+   11 SIGMA           1 r y r  elasticity of substitution: domestic/imported
+    5
+   12 SRCSHR          3 r n n  imp/dom shares
+    5    6    4
+   13 SIGMA1PRIM      1 r y r  CES substitution, primary factors
+    1
+   14 EXP_ELAST       1 r y r  Export demand elasticities
+    5
+   15 V0GDPINC        0 r n n  GDP from income side
+   16 V0GDPEXP        0 r n n  GDP from expenditure side
+   17 CHECK           1 r n n  (costs + tax) - sales : should = 0
+    5
+   18 COSTMAT         2 r n n  Summary of industry costs
+    8    1
+   19 MAINSALES       2 r n n  Summary of sales
+    5    9
+   20 CAPSHR          1 r n n  Share of capital in primary factor costs
+    1
+   21 IMPSHR          1 r n n  Share imports in local purchases
+    5
+#EQUATIONS
+   29
+    1 E_x0                       14  2
+    5    6
+    2 E_x                       140  3
+    5    6    4
+    3 E_p_s                      70  2
+    5    4
+    4 E_x1lab                     7  1
+    1
+    5 E_x1cap                     7  1
+    1
+    6 E_p1prim                    7  1
+    1
+    7 E_x1                       49  2 demand for commodity composites
+    5    1
+    8 E_x1prim                    7  1 demand for primary-factor composites
+    1
+    9 E_p1tot                     7  1 cost of production = cost of all inputs
+    1
+   10 E_x3                        7  1
+    5
+   11 E_x3tot                     1  0
+   12 E_p3tot                     1  0
+   13 E_x4a                       7  1
+    5
+   14 E_x4b                       7  1
+    5
+   15 E_x1tot                     7  1
+    5
+   16 E_pA                        7  1
+    5
+   17 E_pB                        7  1
+    5
+   18 E_w0gdpinc                  1  0
+   19 E_w0gdpexp                  1  0
+   20 E_p0gdpexp                  1  0
+   21 E_x0gdpexp                  1  0
+   22 E_x4tot                     1  0
+   23 E_p4tot                     1  0
+   24 E_p2tot                     1  0
+   25 E_x0cif_c                   1  0
+   26 E_delB                      1  0
+   27 E_realwage                  1  0
+   28 E_employ                    1  0
+   29 E_gret                      7  1
+    1
+#READS
+    7
+    1     1 USE               1 BASEDATA             USE  a h     3
+     5     6     3
+    2     2 FACTOR            1 BASEDATA             1FAC a h     2
+     7     1
+    3     4 V0MTX             1 BASEDATA             0TAR a h     1
+     5
+    4     3 V1PTX             1 BASEDATA             1PTX a h     1
+     1
+    5    11 SIGMA             1 BASEDATA             ARM  a h     1
+     5
+    6    13 SIGMA1PRIM        1 BASEDATA             P028 a h     1
+     1
+    7    14 EXP_ELAST         1 BASEDATA             P018 a h     1
+     5
+#READ(EXTRA)
+    0
+#NCVARIABLES
+    0
+#STATEMENTS
+       6   1 st IND                                              8  43    0 n
+       9   2 st FINALUSER                                        9  77    0 n
+      10   2 st USER                                            10  41    0 n
+      10   2 ss                                                 10  41    0 n
+      10   2 ss                                                 10  41    0 n
+      11   2 st IMPUSER                                         13  79    0 n
+      14   1 ss                                                 15  27    0 n
+      16   2 ss                                                 16  26    0 n
+      18   1 st COM                                             20  43    0 n
+      21   2 st SRC                                             21  41    0 n
+      22   2 st FAC                                             22  43    0 n
+      24   1 cs USE                                             25  62    0 n
+      26   2 cs FACTOR                                          26  69    0 n
+      27   2 cs V1PTX                                           27  74    0 n
+      28   2 cs V0MTX                                           28  70    0 n
+      30   1 fl                                                 30  34    0 n
+      31   1 rd USE                  a                          32  44    0 n
+      33   2 rd FACTOR               a                          33  45    0 n
+      34   2 rd V0MTX                a                          34  45    0 n
+      35   2 rd V1PTX                a                          35  45    0 n
+      40   1 cs USE_S                                           41  68    0 n
+      42   2 cs USE_CS                                          42  72    0 n
+      43   2 cs SALES                                           43  61    0 n
+      44   2 cs V1PRIM                                          44  59    0 n
+      45   2 cs V1TOT                                           45  55    0 n
+      46   2 cs V0CIF                                           46  75    0 n
+      47   1 fm                                                 48  60    0 n
+      49   2 fm                                                 49  60    0 n
+      50   2 fm                                                 50  61    0 n
+      51   2 fm                                                 51  61    0 n
+      52   2 fm                                                 52  72    0 n
+      53   2 fm                                                 53  64    0 n
+      58   1 vr x                                               60  74    0 n
+      61   2 vr x0                                              61  70    0 n
+      63   1 eq E_x0                                            64  76    0 n
+      69   1 vr p                                               70  72    0 n
+      71   2 vr p_s                                             71  72    0 n
+      72   2 vr x_s                                             72  65    0 n
+      74   1 cs SIGMA                                           75  72    0 n
+      76   2 cs SRCSHR                                          76  72    0 n
+      77   1 rd SIGMA                a                          77  43    0 n
+      78   1 fm                                                 79  41    0 n
+      81   1 eq E_x                                             83  54    0 n
+      85   1 eq E_p_s                                           86  72    0 n
+      91   1 vr x1prim                                          92  72    0 n
+      93   2 vr p1prim                                          93  61    0 n
+      94   2 vr x1lab                                           94  50    0 n
+      95  14 vr p1lab                                           95  50    0 n
+      96   2 vr x1cap                                           96  49    0 n
+      97   2 vr p1cap                                           97  51    0 n
+      99   1 cs SIGMA1PRIM                                     100  65    0 n
+     101   1 rd SIGMA1PRIM           a                         101  49    0 n
+     103   1 eq E_x1lab                                        104  68    0 n
+     106   1 eq E_x1cap                                        107  71    0 n
+     109   1 eq E_p1prim                                       111  72    0 n
+     116   1 vr x1tot                                          117  43    0 n
+     118   2 vr a1prim                                         118  74    0 n
+     119   2 vr p1tot                                          119  51    0 n
+     121   1 eq E_x1                                           122  44    0 n
+     124   1 eq E_x1prim                                       125  46    0 n
+     127   1 eq E_p1tot                                        131  57    0 n
+     136   1 vr p3tot                                          137  32    0 n
+     138   2 vr x3tot                                          138  38    0 n
+     139   2 vr w3tot                                          139  47    0 n
+     141   1 eq E_x3                                           142  64    0 n
+     144   1 eq E_x3tot                                        146  59    0 n
+     148   1 eq E_p3tot                                        150  59    0 n
+     155   1 vr pworld                                         156  70    0 n
+     157   2 vr f4q                                            157  60    0 n
+     158  14 vr phi                                            158  64    0 n
+     160   1 cs EXP_ELAST                                      160  79    0 n
+     161   1 rd EXP_ELAST            a                         161  48    0 n
+     163   1 eq E_x4a                                          164  77    0 n
+     166   1 eq E_x4b                                          166  52    0 n
+     171   1 ss                                                171  28    0 n
+     171   1 ss                                                171  28    0 n
+     173   1 eq E_x1tot                                        173  52    0 n
+     175   1 vr Delptxrate                                     176  80    0 n
+     178   1 eq E_pA                                           180  76    0 n
+     185   1 vr Delmtxrate                                     186  78    0 n
+     188   1 eq E_pB                                           190  76    0 n
+     195   1 vr w0gdpinc                                       195  55    0 n
+     196   1 cs V0GDPINC                                       196  47    0 n
+     197   1 fm                                                198  55    0 n
+     199   1 eq E_w0gdpinc                                     204  80    0 n
+     209   1 vr w0gdpexp                                       210  49    0 n
+     211   2 vr p0gdpexp                                       211  49    0 n
+     212   2 vr x0gdpexp                                       212  46    0 n
+     214   1 cs V0GDPEXP                                       215  40    0 n
+     216   1 fm                                                217  75    0 n
+     219   1 eq E_w0gdpexp                                     222  46    0 n
+     224   1 eq E_p0gdpexp                                     226  79    0 n
+     228   1 eq E_x0gdpexp                                     228  51    0 n
+     233   1 vr x4tot                                          234  31    0 n
+     235   2 vr p4tot                                          235  30    0 n
+     236   2 vr p2tot                                          236  34    0 n
+     237   2 vr x0cif_c                                        237  45    0 n
+     238   1 vr delB                                           238  41    0 n
+     240   1 eq E_x4tot                                        241  75    0 n
+     243   1 eq E_p4tot                                        244  65    0 n
+     246   1 eq E_p2tot                                        247  71    0 n
+     249   1 eq E_x0cif_c                                      250  52    0 n
+     252   1 eq E_delB                                         255  55    0 n
+     260   1 vr realwage                                       260  51    0 n
+     261  15 vr employ                                         261  46    0 n
+     262   2 vr gret                                           262  46    0 n
+     264   1 eq E_realwage                                     264  47    0 n
+     266   1 eq E_employ                                       266  74    0 n
+     268   1 eq E_gret                                         268  60    0 n
+     274   1 ud USE                  ap                        275  74    0 n
+     276   2 ud FACTOR               sp                        276  73    0 n
+     277   2 ud FACTOR               sp                        277  76    0 n
+     278   2 ud V0MTX                ac                        279  72    0 n
+     280   2 ud V1PTX                sc                        281  64    0 n
+     286   1 fl                                                286  52    0 n
+     288   1 cs CHECK                                          288  72    0 n
+     289   1 fm                                                289  72    0 n
+     291   1 st COSTCAT                                        291  48    0 n
+     291   1 ss                                                291  48    0 n
+     291   1 ss                                                291  48    0 n
+     292   1 cs COSTMAT                                        293  70    0 n
+     294   1 fm                                                295  60    0 n
+     296   1 fm                                                296  50    0 n
+     298   1 wr CHECK                a                         299  41    0 n
+     300   2 wr COSTMAT              a                         300  41    0 n
+     301   2 wr SALES                a                         301  41    0 n
+     302   2 wr V1PRIM               a                         302  41    0 n
+     303   2 wr V1TOT                a                         303  41    0 n
+     304   2 wr V0CIF                a                         304  41    0 n
+     305   2 wr V0GDPEXP             a                         305  41    0 n
+     306   2 wr V0GDPINC             a                         306  41    0 n
+     311   1 st MAINUSER                                       312  62    0 n
+     313   1 ss                                                313  39    0 n
+     314   1 cs MAINSALES                                      315  65    0 n
+     316   1 fm                                                317  69    0 n
+     318   2 fm                                                318  62    0 n
+     320   1 cs CAPSHR                                         320  79    0 n
+     321   1 fm                                                321  66    0 n
+     323   1 cs IMPSHR                                         323  71    0 n
+     324   1 fm                                                325  80    0 n
+     327   1 wr MAINSALES            a                         328  41    0 n
+     329   2 wr CAPSHR               a                         329  41    0 n
+     330   2 wr IMPSHR               a                         330  41    0 n
+     330   2 en IMPSHR               a                         330  41    0 n
+#GPVER
+  120003
+#PRVER
+    7000
+#FINAL_LEVEL
+ ln c x
+ ln c x0
+ ln c p
+ ln c p_s
+ ln c x_s
+ ln c x1prim
+ ln c p1prim
+ ln c x1lab
+ ln c p1lab
+ ln c x1cap
+ ln c p1cap
+ ln c x1tot
+ ln c a1prim
+ ln c p1tot
+ ln c p3tot
+ ln c x3tot
+ ln c w3tot
+ ln c pworld
+ ln c f4q
+ ln c phi
+ ln c Delptxrate
+ ln c Delmtxrate
+ ln c w0gdpinc
+ ln c w0gdpexp
+ ln c p0gdpexp
+ ln c x0gdpexp
+ ln c x4tot
+ ln c p4tot
+ ln c p2tot
+ ln c x0cif_c
+ ln c delB
+ ln c realwage
+ ln c employ
+ ln c gret
+#CSPSIM
+nnnnnnnnnnnnnnnnnnnnn

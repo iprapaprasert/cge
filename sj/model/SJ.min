@@ -1,0 +1,201 @@
+#FILES
+Logical Name         In/Out Ud  Type Actual Name
+iodata                In     y  HAR
+ input-output data for the model
+(Display)             Out    n  DIS
+(Solution)            Out    y  SL4
+(Equations)           Out    y  EQ4
+#TABFILE
+SJ.tab
+#TMDATE
+at 09:02:23 on 05-FEB-2026
+#STIFILE
+%none
+#SETS
+    3
+    1 SECT                 2  k Sectors
+s1          
+s2          
+    2 FAC                  2  k Factors
+labor       
+capital     
+    3 NUM_SECT             1  k Numeraire sector - sector 1
+s1          
+#VARIABLES
+        11
+    1 p_Y                      1     0 ? Total nominal household expenditure
+    2 p_PC                     2     1 ? Price of commodity i
+    1
+    3 p_PF                     2     1 ? Price of factor f
+    2
+    4 p_XCOM                   2     1 ? Total demand for (or supply of) commodity i
+    1
+    5 p_XFAC                   2     1 ? Total demand for (or supply of) factor f
+    2
+    6 p_XH                     2     1 ? Household demand for commodity i
+    1
+    7 p_XC                     4     2 ? Intermediate inputs of commodity i to industry j
+    1    1
+    8 p_XF                     4     2 ? Factor inputs to industry j
+    2    1
+    9 p_DVCOMIN                4     2 ? Dollar value of inputs of commodity i to industry j
+    1    1
+   10 p_DVFACIN                4     2 ? Dollar value of factor f used in industry j
+    2    1
+   11 p_DVHOUS                 2     1 ? Dollar value of household use of commodity i
+    1
+#VCSTAT
+ccccccccccc
+#VCTP
+ppppppppppp
+#SUBSETS
+     1
+     1     3     1
+#COEFFICIENTS
+   13
+    1 Y               0 r n y  Total nominal household expenditure
+    2 PC              1 r n y  Price of commodity i
+    1
+    3 PF              1 r n y  Price of factor f
+    2
+    4 XCOM            1 r n y  Total demand for (or supply of) commodity i
+    1
+    5 XFAC            1 r n y  Total demand for (or supply of) factor f
+    2
+    6 XH              1 r n y  Household demand for commodity i
+    1
+    7 XC              2 r n y  Intermediate inputs of commodity i to industry j
+    1    1
+    8 XF              2 r n y  Factor inputs to industry j
+    2    1
+    9 DVCOMIN         2 r y y  Dollar value of inputs of commodity i to industry j
+    1    1
+   10 DVFACIN         2 r y y  Dollar value of factor f used in industry j
+    2    1
+   11 DVHOUS          1 r y y  Dollar value of household use of commodity i
+    1
+   12 ALPHACOM        2 r n n  Share of intermediate use of commodity i in costs of industry j
+    1    1
+   13 ALPHAFAC        2 r n n  Share of factor input f in costs of industry j
+    2    1
+#EQUATIONS
+   10
+    1 Comin                       4  2 Intermediate input of commodity i to industry j
+    1    1
+    2 Facin                       4  2 Factor input f to industry j
+    2    1
+    3 House                       2  1 Household demand for commodity i
+    1
+    4 Com_clear                   2  1 Commodity market clearing
+    1
+    5 Factor_use                  2  1 Aggregate primary factor usage
+    2
+    6 Consumer_demands            2  1 Household expenditure functions
+    1
+    7 Intermediate_com            4  2 Intermediate demands for commodity i by industry j
+    1    1
+    8 Factor_inputs               4  2 Factor input demand functions
+    2    1
+    9 Price_formation             2  1 Unit cost index for industry j
+    1
+   10 Numeraire                   1  1 Price of commodity 1 is the numeraire
+    3
+#READS
+    3
+    1     9 DVCOMIN           1 iodata               CINP a h     2
+     1     1
+    2    10 DVFACIN           1 iodata               FINP a h     2
+     2     1
+    3    11 DVHOUS            1 iodata               HCON a h     1
+     1
+#READ(EXTRA)
+    0
+#NCVARIABLES
+    0
+#STATEMENTS
+      27   1 df                                                 27  29    0 n
+      28   1 df                                                 28  29    0 n
+      29   1 df                                                 29  35    0 n
+      30   1 df                                                 30  29    0 n
+      41   1 st SECT                                            41  31    0 n
+      43   1 st FAC                                             43  39    0 n
+      45   1 st NUM_SECT                                        45  52    0 n
+      47   1 ss                                                 47  36    0 n
+      56   1 vr p_Y                  Y                          57  56    0 n
+      56   1 cs Y                                               57  56    0 n
+      59   1 vr p_PC                 PC                         60  64    0 n
+      59   1 cs PC                                              60  64    0 n
+      61   1 vr p_PF                 PF                         62  64    0 n
+      61   1 cs PF                                              62  64    0 n
+      63   1 vr p_XCOM               XCOM                       65  64    0 n
+      63   1 cs XCOM                                            65  64    0 n
+      66   1 vr p_XFAC               XFAC                       68  64    0 n
+      66   1 cs XFAC                                            68  64    0 n
+      69   1 vr p_XH                 XH                         70  65    0 n
+      69   1 cs XH                                              70  65    0 n
+      71   1 vr p_XC                 XC                         73  40    0 n
+      71   1 cs XC                                              73  40    0 n
+      74   1 vr p_XF                 XF                         76  45    0 n
+      74   1 cs XF                                              76  45    0 n
+      82   1 vr p_DVCOMIN            DVCOMIN                    83  61    0 n
+      82   1 cs DVCOMIN                                         83  61    0 n
+      84   1 vr p_DVFACIN            DVFACIN                    85  53    0 n
+      84   1 cs DVFACIN                                         85  53    0 n
+      86   1 vr p_DVHOUS             DVHOUS                     87  54    0 n
+      86   1 cs DVHOUS                                          87  54    0 n
+      93   1 cs ALPHACOM                                        94  70    0 n
+      95   1 cs ALPHAFAC                                        96  53    0 n
+     102   1 fl                                                102  49    0 n
+     108   1 rd DVCOMIN              a                         108  45    0 n
+     109   1 rd DVFACIN              a                         109  45    0 n
+     110   1 rd DVHOUS               a                         110  45    0 n
+     116   1 fm                                                116  34    0 n
+     117   1 fm                                                117  33    0 n
+     118   1 fm                                                119  67    0 n
+     120   1 fm                                                121  67    0 n
+     124   1 fm                                                124  35    0 n
+     130   1 fm                                                132  57    0 n
+     130   1 eq Comin                                          132  57    0 n
+     134   1 fm                                                136  56    0 n
+     134   1 eq Facin                                          136  56    0 n
+     138   1 fm                                                140  40    0 n
+     138   1 eq House                                          140  40    0 n
+     142   1 fm                                                144  52    0 n
+     142   1 eq Com_clear                                      144  52    0 n
+     146   1 fm                                                148  43    0 n
+     146   1 eq Factor_use                                     148  43    0 n
+     154   1 eq Consumer_demands                               156  38    0 n
+     158   1 eq Intermediate_com                               162  70    0 n
+     164   1 eq Factor_inputs                                  168  69    0 n
+     170   1 eq Price_formation                                173  65    0 n
+     175   1 eq Numeraire                                      177  29    0 n
+       0   1 ud Y                    ap                          0   0    0 n
+       0   1 ud PC                   ap                          0   0    0 n
+       0   1 ud PF                   ap                          0   0    0 n
+       0   1 ud XCOM                 ap                          0   0    0 n
+       0   1 ud XFAC                 ap                          0   0    0 n
+       0   1 ud XH                   ap                          0   0    0 n
+       0   1 ud XC                   ap                          0   0    0 n
+       0   1 ud XF                   ap                          0   0    0 n
+       0   1 ud DVCOMIN              ap                          0   0    0 n
+       0   1 ud DVFACIN              ap                          0   0    0 n
+       0   1 ud DVHOUS               ap                          0   0    0 n
+       0   1 en DVHOUS               ap                          0   0    0 n
+#GPVER
+  120003
+#PRVER
+    7000
+#FINAL_LEVEL
+ lv c p_Y             Y
+ lv c p_PC            PC
+ lv c p_PF            PF
+ lv c p_XCOM          XCOM
+ lv c p_XFAC          XFAC
+ lv c p_XH            XH
+ lv c p_XC            XC
+ lv c p_XF            XF
+ lv c p_DVCOMIN       DVCOMIN
+ lv c p_DVFACIN       DVFACIN
+ lv c p_DVHOUS        DVHOUS
+#CSPSIM
+nnnnnnnnnnnnn

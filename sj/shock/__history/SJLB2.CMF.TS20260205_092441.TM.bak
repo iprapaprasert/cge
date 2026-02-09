@@ -1,0 +1,41 @@
+!
+! The following GEMPACK Command file (usually called SJLB2.CMF) 
+!  carries out a multi-step simulation
+!  for the Stylized Johansen model.
+
+!  Auxiliary files (usually tells which TAB file)
+auxiliary files = sj ;
+
+! Data files
+file iodata = ..\model\sj.har ;
+updated file iodata = <cmf>.upd ;
+
+! Closure
+exogenous p_xfac ;
+rest endogenous ;
+swap p_pf("labor") = p_xfac("labor");
+
+! Solution method information
+method = euler ;
+steps = 1 2 4 ;
+
+! Simulation part
+
+! Name of Solution file is inferred from name of Command file.
+! (See section 2.5 of GPD-3.)
+
+shock p_pf("labor") = 3;
+shock p_xfac("capital) = 10;
+
+verbal description =
+Stylized Johansen model. Standard data.
+Short-run closure. Capital amount and wage remains fixed in short run.
+3% increase in wage.
+10% increase in amount of capital;
+
+! Options
+extrapolation accuracy file = yes ;
+log file = yes ;
+
+! End of Command file
+

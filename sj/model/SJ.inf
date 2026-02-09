@@ -1,0 +1,587 @@
+
+    TTTTTTTTTT  AAAAAAAAAA   BBBBBBB      LLLL        OOOOOOOOOO
+    TTTTTTTTTT  AAA    AAA   BBBBBBBBB    LLLL        OOOOOOOOOO
+       TTT      AAA    AAA   BBB    BBB   LLLL        OOO    OOO
+       TTT      AAA    AAA   BBB  BBB     LLLL        OOO    OOO
+       TTT      AAAAAAAAAA   BBBBBBB      LLLL        OOO    OOO
+       TTT      AAAAAAAAAA   BBB  BBB     LLLL        OOO    OOO
+       TTT      AAA    AAA   BBB    BBB   LLLL        OOO    OOO
+       TTT      AAA    AAA   BBBBBBBBB    LLLLLLLLL   OOOOOOOOOO
+       TTT      AAA    AAA   BBBBBBB      LLLLLLLLL   OOOOOOOOOO
+
+ <TABLO  Version 7.0   August 2018>                                    
+
+
+
+
+
+                     GEMPACK SOFTWARE
+     << COPYRIGHT 1987-2018:  The Impact Project and KPSOFT >>
+   
+   
+
+    +++  INFORMATION ABOUT THIS PRINT FILE  +++
+   
+
+ ! This file was created at 09:02:18 on 05-FEB-2026 by the program
+ !  <TABLO  Version 7.0   August 2018>
+ ! which accesses some of the routines in the GEMPACK software release
+ !  <GEMPACK Release 12.0.003   February 2019>
+ 
+ !     -------------------------------------------------------                
+ !    !            GEMPACK Software System Licence            !               
+ !    !  Source Code Licence for the GEMPACK Software System  !               
+ !    !                 Licence No.  GFM-1643                 !               
+ !    !          Licence for Release 12.0 of GEMPACK          !               
+ !    !              The Thailand Research Fund               !               
+ !    !                Phyathai, Bangkok 10400                !               
+ !     -------------------------------------------------------                
+    
+
+    +++  END OF INFORMATION ABOUT THIS PRINT FILE  +++
+
+ ======================================================
+           TABLO PORTABLE   
+ ++> TABLO OPTIONS   ( --> indicates those in effect )
+ ======================================================
+
+
+
+      -----------                   ----------
+  --> F1 CHECK                      L1 CHECK
+      F2 CONDENSATION               L2 CONDENSATION
+      F3 CODE GENERATION        --> L3 CODE GENERATION
+      Mode
+      ----
+      INTERACTIVE
+      BATCH
+  --> UNSPECIFIED
+
+
+ ==================================================
+ ++> TABLO Input file is 'SJ.tab'
+ ++> This Information file is 'SJ'
+ ==================================================
+
+
+
+ ******************************************************************************
+ -1-
+ -->                     Starting CHECK stage
+
+ ******************************************************************************
+
+
+      1    
+      2   !-------------------------------------------------------------------!
+      3   !                  Mixed TABLO Input file for the                   !
+      4   !                    Stylized Johansen model                        !
+      5   !                                                                   !
+      6   !         following the description in Chapter 3 of the text        !
+      7   !   "Notes and Problems in Applied General Equilibrium Economics"   !
+      8   !       by P.Dixon, B.Parmenter, A.Powell and P.Wilcoxen [DPPW]     !
+      9   !              published by North-Holland 1992.                     !
+     10   !                                                                   !
+     11   !-------------------------------------------------------------------!
+     12    
+     13   !
+     14     Revised February 1998 to include "GE 0" qualifiers
+     15       to take advantage of Release 6.0 of GEMPACK which can then
+     16       ensure that these never become negative in simulations
+     17       carried out with user-specified accurary.
+     18   !
+     19    
+     20   ! Text between exclamation marks is a comment.                      !
+     21   ! Text between hashes (#) is labelling information.                 !
+     22    
+     23   !-------------------------------------------------------------------!
+     24   !     Set default values                                            !
+     25   !-------------------------------------------------------------------!
+     26    
+     27   VARIABLE (DEFAULT = LEVELS) ;
+     28   EQUATION (DEFAULT = LEVELS) ;
+     29   COEFFICIENT (DEFAULT = PARAMETER) ;
+     30   FORMULA (DEFAULT = INITIAL) ;
+     31    
+     32   !-------------------------------------------------------------------!
+     33   !      Sets                                                         !
+     34   !-------------------------------------------------------------------!
+     35    
+     36   ! Index values i=1,2 in DPPW correspond to the sectors called s1,s2.
+     37     Index values i=3,4 in DPPW correspond to the primary factors,
+     38     labor and capital.   The set SECT below doubles as the set of
+     39     commodities  and the set of industries. !
+     40    
+     41   SET SECT # Sectors # (s1-s2)  ;
+     42    
+     43   SET FAC # Factors  # (labor, capital) ;
+     44    
+     45   SET NUM_SECT # Numeraire sector - sector 1 #  (s1) ;
+     46    
+     47   SUBSET  NUM_SECT is subset of SECT ;
+     48    
+     49   !-------------------------------------------------------------------!
+     50   !      Levels variables                                             !
+     51   !-------------------------------------------------------------------!
+     52    
+     53   ! In the DPPW names shown below, : denotes subscript.               !
+     54   ! For example, x:j indicates that j is a subscript.                 !
+     55    
+     56   Variable (GE 0)        Y    # Total nominal household expenditure #
+     57                               ! This is also Y in DPPW ! ;
+     58    
+     59   Variable (GE 0) (all,i,SECT)  PC(i)   # Price of commodity i #
+     60                                  ! This is p:i (i=1,2) in DPPW ! ;
+     61   Variable (GE 0) (all,f,FAC)   PF(f)   # Price of factor f #
+     62                                  ! This is p:i (i=3,4) in DPPW ! ;
+     63   Variable (GE 0) (all,i,SECT)  XCOM(i)
+     64       # Total demand for (or supply of) commodity i #
+     65                                  ! This is x:i (i=1,2) in DPPW ! ;
+     66   Variable (GE 0) (all,f,FAC)   XFAC(f)
+     67       # Total demand for (or supply of) factor f    #
+     68                                  ! This is x:i (i=3,4) in DPPW ! ;
+     69   Variable (GE 0) (all,i,SECT)  XH(i)   # Household demand for commodity i #
+     70                                  ! This is x:i0 (i=1,2) in DPPW ! ;
+     71   Variable (GE 0) (all,i,SECT) (all,j,SECT)     XC(i,j)
+     72       # Intermediate inputs of commodity i to industry j #
+     73       ! This is x:ij (i,j=1,2) in DPPW ! ;
+     74   Variable (GE 0) (all,f,FAC)(all,j,SECT)       XF(f,j)
+     75       # Factor inputs to industry j #
+     76       ! This is x:ij (i=3,4; j=1,2) in DPPW ! ;
+     77    
+     78   !-------------------------------------------------------------------!
+     79   !     Dollar values read in from database                           !
+     80   !-------------------------------------------------------------------!
+     81    
+     82   Variable (GE 0) (all,i,SECT)(all,j,SECT)      DVCOMIN(i,j)
+     83       # Dollar value of inputs of commodity i to industry j # ;
+     84   Variable (GE 0) (all,f,FAC)(all,j,SECT)       DVFACIN(f,j)
+     85       # Dollar value of factor f used in industry j # ;
+     86   Variable (GE 0) (all,i,SECT)                  DVHOUS(i)
+     87       # Dollar value of household use of commodity i # ;
+     88    
+     89   !-------------------------------------------------------------------!
+     90   !     Parameters                                                    !
+     91   !-------------------------------------------------------------------!
+     92    
+     93   COEFFICIENT (all,i,SECT)(all,j,SECT)  ALPHACOM(i,j)
+     94    # Share of intermediate use of commodity i in costs of industry j # ;
+     95   COEFFICIENT (all,f,FAC)(all,j,SECT)   ALPHAFAC(f,j)
+     96    # Share of factor input f in costs of industry j # ;
+     97    
+     98   !-------------------------------------------------------------------!
+     99   !      File                                                         !
+    100   !-------------------------------------------------------------------!
+    101    
+    102   FILE iodata # input-output data for the model # ;
+    103    
+    104   !-------------------------------------------------------------------!
+    105   !      Reads from the data base                                     !
+    106   !-------------------------------------------------------------------!
+    107    
+    108   READ DVCOMIN from FILE iodata HEADER "CINP" ;
+    109   READ DVFACIN from FILE iodata HEADER "FINP" ;
+    110   READ DVHOUS  from FILE iodata HEADER "HCON" ;
+    111    
+    112   !-------------------------------------------------------------------!
+    113   !      Formulas                                                     !
+    114   !-------------------------------------------------------------------!
+    115    
+    116   FORMULA (all,i,SECT) PC(i) = 1.0 ;
+    117   FORMULA (all,i,FAC) PF(i) = 1.0 ;
+    118   FORMULA (all,i,SECT)(all,j,SECT) ALPHACOM(i,j) = DVCOMIN(i,j) /
+    119           [SUM(ii,SECT,DVCOMIN(ii,j)) + SUM (ff,FAC,DVFACIN(ff,j))] ;
+    120   FORMULA (all,f,FAC)(all,j,SECT) ALPHAFAC(f,j) = DVFACIN(f,j) /
+    121           [SUM(ii,SECT,DVCOMIN(ii,j)) + SUM (ff,FAC,DVFACIN(ff,j))] ;
+    122    
+    123   ! Formula to give initial value of Y !
+    124   FORMULA Y = SUM(i,SECT,DVHOUS(i)) ;
+    125    
+    126   !-------------------------------------------------------------------!
+    127   !       Formulas and levels equations                               !
+    128   !-------------------------------------------------------------------!
+    129    
+    130   FORMULA & EQUATION Comin
+    131      # Intermediate input of commodity i to industry j #
+    132   (all,i,SECT)(all,j,SECT) XC(i,j) = DVCOMIN(i,j) / PC(i) ;
+       !  EQUATION(LINEAR) Comin
+          (ALL,i,SECT) (ALL,j,SECT) p_XC(i,j) = p_DVCOMIN(i,j) - p_PC(i) ;  ! 
+
+    133    
+    134   FORMULA & EQUATION Facin
+    135      # Factor input f to industry j #
+    136   (all,f,FAC)(all,j,SECT) XF(f,j) = DVFACIN(f,j) / PF(f) ;
+       !  EQUATION(LINEAR) Facin
+          (ALL,f,FAC) (ALL,j,SECT) p_XF(f,j) = p_DVFACIN(f,j) - p_PF(f) ;  ! 
+
+    137    
+    138   FORMULA & EQUATION House
+    139      # Household demand for commodity i #
+    140   (all,i,SECT) XH(i) = DVHOUS(i) / PC(i) ;
+       !  EQUATION(LINEAR) House
+          (ALL,i,SECT) p_XH(i) = p_DVHOUS(i) - p_PC(i) ;  ! 
+
+    141    
+    142   FORMULA & EQUATION Com_clear ! (E3.1.6) in DPPW !
+    143      # Commodity market clearing #
+    144   (all,i,SECT) XCOM(i) = XH(i) + SUM(j,SECT,XC(i,j)) ;
+       !  EQUATION(LINEAR) Com_clear
+          (ALL,i,SECT) XCOM(i) * p_XCOM(i) = XH(i) * p_XH(i) + SUM(j,SECT,XC(i,
+
+          j) * p_XC(i,j)) ;  ! 
+
+    145    
+    146   FORMULA & EQUATION Factor_use ! (E3.1.7) in DPPW !
+    147       # Aggregate primary factor usage #
+    148   (all,f,FAC) XFAC(f) = SUM(j,SECT,XF(f,j)) ;
+       !  EQUATION(LINEAR) Factor_use
+          (ALL,f,FAC) XFAC(f) * p_XFAC(f) = SUM(j,SECT,XF(f,j) * p_XF(f,j)) ; 
+
+           ! 
+
+    149    
+    150   !-------------------------------------------------------------------!
+    151   !      Equations                                                    !
+    152   !-------------------------------------------------------------------!
+    153    
+    154   EQUATION(LINEAR)  Consumer_demands ! (E3.2.1) in DPPW !
+    155       # Household expenditure functions #
+    156   (all,i,SECT) p_XH(i) = p_Y - p_PC(i) ;
+    157    
+    158   EQUATION(LINEAR)  Intermediate_com
+    159   ! From (E3.2.2) with i=1,2 in DPPW. The term p_PC(j) is included
+    160      because of (E3.2.3) in DPPW. !
+    161       # Intermediate demands for commodity i by industry j #
+    162   (all,i,SECT)(all,j,SECT) p_XC(i,j) = p_XCOM(j) - (p_PC(i) - p_PC(j)) ;
+    163    
+    164   EQUATION(LINEAR)  Factor_inputs
+    165   ! From (E3.2.2) with i=3,4 in DPPW. The term p_PC(j) is included
+    166      because of (E3.2.3) in DPPW. !
+    167       # Factor input demand functions #
+    168   (all,f,FAC)(all,j,SECT) p_XF(f,j) = p_XCOM(j) - (p_PF(f) - p_PC(j)) ;
+    169    
+    170   EQUATION(LINEAR) Price_formation   ! (E3.2.3) in DPPW !
+    171       # Unit cost index for industry j #
+    172   (all,j,SECT) p_PC(j) = SUM(i,SECT,ALPHACOM(i,j)*p_PC(i)) +
+    173                                  SUM(f,FAC,ALPHAFAC(f,j)*p_PF(f)) ;
+    174    
+    175   EQUATION Numeraire  ! (E3.1.23) in DPPW !
+    176       # Price of commodity 1 is the numeraire #
+    177   (all,i,NUM_SECT)  PC(i) = 1 ;
+       !  EQUATION(LINEAR) Numeraire
+          (ALL,i,NUM_SECT) p_PC(i) = 0 ;  ! 
+
+    178    
+    179   !--------------end of TABLO Input file------------------------------!
+    180    
+
+
+
+
+ ========================
+ ++ INPUT STATEMENT TABLE
+ ========================
+
+          Starts   Syntax  Semantic
+  Number  at line  Error?   Error?            Description
+  ------------------------------------------------------------
+     1        41     no       no      SET 'SECT'                              
+     2        43     no       no      SET 'FAC'                               
+     3        45     no       no      SET 'NUM_SECT'                          
+     4        47     no       no      SUBSET 1 'NUM_SECT' of 'SECT'           
+     5        56     no       no      VARIABLE 'p_Y'                          
+     6        56     no       no      COEFFICIENT 'Y'                         
+     7        59     no       no      VARIABLE 'p_PC'                         
+     8        59     no       no      COEFFICIENT 'PC'                        
+     9        61     no       no      VARIABLE 'p_PF'                         
+    10        61     no       no      COEFFICIENT 'PF'                        
+    11        63     no       no      VARIABLE 'p_XCOM'                       
+    12        63     no       no      COEFFICIENT 'XCOM'                      
+    13        66     no       no      VARIABLE 'p_XFAC'                       
+    14        66     no       no      COEFFICIENT 'XFAC'                      
+    15        69     no       no      VARIABLE 'p_XH'                         
+    16        69     no       no      COEFFICIENT 'XH'                        
+    17        71     no       no      VARIABLE 'p_XC'                         
+    18        71     no       no      COEFFICIENT 'XC'                        
+    19        74     no       no      VARIABLE 'p_XF'                         
+    20        74     no       no      COEFFICIENT 'XF'                        
+    21        82     no       no      VARIABLE 'p_DVCOMIN'                    
+    22        82     no       no      COEFFICIENT 'DVCOMIN'                   
+    23        84     no       no      VARIABLE 'p_DVFACIN'                    
+    24        84     no       no      COEFFICIENT 'DVFACIN'                   
+    25        86     no       no      VARIABLE 'p_DVHOUS'                     
+    26        86     no       no      COEFFICIENT 'DVHOUS'                    
+    27        93     no       no      COEFFICIENT 'ALPHACOM'                  
+    28        95     no       no      COEFFICIENT 'ALPHAFAC'                  
+    29       102     no       no      FILE 'iodata'                           
+    30       108     no       no      READ into 'DVCOMIN'                     
+    31       109     no       no      READ into 'DVFACIN'                     
+    32       110     no       no      READ into 'DVHOUS'                      
+    33       116     no       no      Formula for 'PC'                        
+    34       117     no       no      Formula for 'PF'                        
+    35       118     no       no      Formula for 'ALPHACOM'                  
+    36       120     no       no      Formula for 'ALPHAFAC'                  
+    37       124     no       no      Formula for 'Y'                         
+    38       130     no       no      Formula for 'XC'                        
+    39       130     no       no      EQUATION 'Comin'                        
+    40       134     no       no      Formula for 'XF'                        
+    41       134     no       no      EQUATION 'Facin'                        
+    42       138     no       no      Formula for 'XH'                        
+    43       138     no       no      EQUATION 'House'                        
+    44       142     no       no      Formula for 'XCOM'                      
+    45       142     no       no      EQUATION 'Com_clear'                    
+    46       146     no       no      Formula for 'XFAC'                      
+    47       146     no       no      EQUATION 'Factor_use'                   
+    48       154     no       no      EQUATION 'Consumer_demands'             
+    49       158     no       no      EQUATION 'Intermediate_com'             
+    50       164     no       no      EQUATION 'Factor_inputs'                
+    51       170     no       no      EQUATION 'Price_formation'              
+    52       175     no       no      EQUATION 'Numeraire'                    
+    53         0     no       no      UPDATE of 'Y'                           
+    54         0     no       no      UPDATE of 'PC'                          
+    55         0     no       no      UPDATE of 'PF'                          
+    56         0     no       no      UPDATE of 'XCOM'                        
+    57         0     no       no      UPDATE of 'XFAC'                        
+    58         0     no       no      UPDATE of 'XH'                          
+    59         0     no       no      UPDATE of 'XC'                          
+    60         0     no       no      UPDATE of 'XF'                          
+    61         0     no       no      UPDATE of 'DVCOMIN'                     
+    62         0     no       no      UPDATE of 'DVFACIN'                     
+    63         0     no       no      UPDATE of 'DVHOUS'                      
+
+
+
+
+ ============
+ ++ SET TABLE
+ ============
+
+                    Defined   [Max] Inter             Set numbers this
+  Number    Name    at line    Size temp? Elements    is subset of
+  ---------------------------------------------------------------------
+     1  SECT           41         2   no   fixed
+     2  FAC            43         2   no   fixed
+     3  NUM_SECT       45         1   no   fixed     1
+
+
+
+
+ ===============
+ ++ SUBSET TABLE
+ ===============
+
+  Number  Lt Set  Lt Set        Big set  Big set
+          number  name          number   name   
+  ---------------------------------------------------
+       1       3  NUM_SECT            1  SECT        
+
+
+
+
+ =============
+ ++ FILE TABLE
+ =============
+
+         Logical            Defined  File  File
+  Number  Name              at line  Type  Form  Actual name (if given)
+  --------------------------------------------------------------------
+     1  iodata                 102    old  head
+
+
+
+
+ =================
+ ++ VARIABLE TABLE
+ =================
+
+                        Defined  No            Arguments range
+  Number    Name        at line  Args Type     over sets numbered
+  ------------------------------------------------------------
+     1   p_Y                56     0  perc
+     2   p_PC               59     1  perc       1
+     3   p_PF               61     1  perc       2
+     4   p_XCOM             63     1  perc       1
+     5   p_XFAC             66     1  perc       2
+     6   p_XH               69     1  perc       1
+     7   p_XC               71     2  perc       1     1
+     8   p_XF               74     2  perc       2     1
+     9   p_DVCOMIN          82     2  perc       1     1
+    10   p_DVFACIN          84     2  perc       2     1
+    11   p_DVHOUS           86     1  perc       1
+
+
+
+
+ ====================
+ ++ COEFFICIENT TABLE
+ ====================
+
+                        Defined  No            Arguments range
+  Number    Name        at line  Args Type     over sets numbered
+  ------------------------------------------------------------
+     1    Y                 56     0  real
+     2    PC                59     1  real       1
+     3    PF                61     1  real       2
+     4    XCOM              63     1  real       1
+     5    XFAC              66     1  real       2
+     6    XH                69     1  real       1
+     7    XC                71     2  real       1     1
+     8    XF                74     2  real       2     1
+     9    DVCOMIN           82     2  real       1     1
+    10    DVFACIN           84     2  real       2     1
+    11    DVHOUS            86     1  real       1
+    12    ALPHACOM          93     2  real       1     1
+    13    ALPHAFAC          95     2  real       2     1
+
+
+
+
+ =================
+ ++ EQUATION TABLE
+ =================
+
+           Defined     Semantic                        ALL quantifiers range
+  Number   at line      Error?   Equation name         over sets numbered
+  --------------------------------------------------------------------------
+     1         130       no      Comin                      1     1
+     2         134       no      Facin                      2     1
+     3         138       no      House                      1
+     4         142       no      Com_clear                  1
+     5         146       no      Factor_use                 2
+     6         154       no      Consumer_demands           1
+     7         158       no      Intermediate_com           1     1
+     8         164       no      Factor_inputs              2     1
+     9         170       no      Price_formation            1
+    10         175       no      Numeraire                  3
+
+
+
+
+ ================
+ ++ FORMULA TABLE
+ ================
+
+           Defined   Semantic      LHS                RHS
+  Number   at line    Error?    coefficient       coefficient numbers
+  -------------------------------------------------------------------
+     1         116     no      PC          
+     2         117     no      PF          
+     3         118     no      ALPHACOM           9    10
+     4         120     no      ALPHAFAC          10     9
+     5         124     no      Y                 11
+     6         130     no      XC                 9     2
+     7         134     no      XF                10     3
+     8         138     no      XH                11     2
+     9         142     no      XCOM               6     7
+    10         146     no      XFAC               8
+
+
+
+
+ ===============
+ ++ UPDATE TABLE
+ ===============
+
+           Defined   Semantic    Updated         RHS coeff/var nos
+  Number   at line    Error?    coefficient       (vars are negative)
+  -------------------------------------------------------------------
+     1           0     no      Y                  1    -1
+     2           0     no      PC                 2    -2
+     3           0     no      PF                 3    -3
+     4           0     no      XCOM               4    -4
+     5           0     no      XFAC               5    -5
+     6           0     no      XH                 6    -6
+     7           0     no      XC                 7    -7
+     8           0     no      XF                 8    -8
+     9           0     no      DVCOMIN            9    -9
+    10           0     no      DVFACIN           10   -10
+    11           0     no      DVHOUS            11   -11
+
+
+
+
+ =============
+ ++ READ TABLE
+ =============
+
+           Defined    Semantic  Coefficient   File number
+  Number   at line     Error?    read into     read from   Header
+  ---------------------------------------------------------------
+     1        108       no      DVCOMIN             1       CINP
+     2        109       no      DVFACIN             1       FINP
+     3        110       no      DVHOUS              1       HCON
+
+
+   
+ ======================
+ ++ INPUT CHECK SUMMARY
+ ======================
+
+ Total number of statements is 63.
+ There are NO syntax errors or semantic problems.
+
+
+ ******************************************************************************
+ -3-
+ -->                     Starting CODE GENERATION
+
+ ******************************************************************************
+
+
+
+  CODE OPTIONS CHOSEN
+  -------------------
+
+
+                         TABLO PORTABLE
+               CODE OPTIONS   ( --> indicates those in effect )
+
+      NEQ Do no equations           PGS Prepare output for GEMSIM
+      NDS Do no displays        --> WFP Write a Fortran Program
+      NWR Do no writes                    (i.e. a TABLO-generated program)
+                                --> FC5 Fast Compile TG-prog under LF95
+      ACC All comment lines in      NMS Don't allow simulations
+             code
+                                    CIN Code file name same as
+                                          Information file name
+                                    CDM Old option. Has no effect.
+                                    NRZ No run-time reports re use of
+                                           ZERODIVIDE default values
+                                    NXS No "extra" statements allowed
+
+  Select an option   :  <opt>      Deselect an option      : -<opt>
+  Help for an option : ?<opt>      Help on all options     : ??
+  Redisplay options  : /           Finish option selection : Carriage return
+
+  END OF CODE OPTIONS CHOSEN
+  --------------------------
+  
+
+ (Number of equations is 27.)
+ (Number of unknowns in the equations is 29.)
+! ( Program is 'SJ.for'.)
+ (Total number of lines of code is 6165.)
+
+ This program
+     o can create the Equations file
+     o can carry out multi-step simulations
+
+ MXGSRS = 0, MXGSIS = 0.
+ MXGSLG = 0, MXGSIC = 0.
+
+ MXGSOP = 0, MXGSIN = 0.
+ MXGSRC = 0, MXGSNS=0.
+! (Model Information file is 'SJ.min'.)
+
+ (Total number of programs written is 1.)
+
+ *******************************************************************
+ Successful completion of TABLO.
+ The program is
+   'SJ.for'.
+
+ This program
+     o can create the Equations file
+     o can carry out multi-step simulations
+
+ *******************************************************************

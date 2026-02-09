@@ -1,0 +1,332 @@
+! Minimal model Jun 2004 !
+
+! Excerpt 1 of TABLO input file: !
+! Sets and flows data!
+
+Set  ! User categories: IO table columns !
+ IND # Industries #  (AgricMining, Manufacture, Utilities, Construction,
+     TradeTranspt, FinanProprty, Services);                      ! subscript i !
+ FINALUSER # Final demanders # (Investment, Households, Government, Exports);
+ USER # All users #= IND union FINALUSER;                        ! subscript u !
+ IMPUSER # Non-export demanders: users of imports #
+   (AgricMining, Manufacture, Utilities, Construction,
+     TradeTranspt, FinanProprty, Services, Investment, Households, Government);
+Subset
+ IMPUSER is subset of USER;
+ IND is subset of IMPUSER;
+
+Set  ! Input categories: IO table rows !
+ COM # Commodities # (AgricMining, Manufacture, Utilities, Construction,
+     TradeTranspt, FinanProprty, Services);                      ! subscript c !
+ SRC # Source of commodities # (dom,imp);                        ! subscript s !
+ FAC # Primary factors # (Labour, Capital);                      ! subscript f !
+
+Coefficient
+ (all,c,COM)(all,s,SRC)(all,u,USER) USE(c,s,u) # USE matrix #;
+ (all,f,FAC)(all,i,IND)            FACTOR(f,i) # Wages and profits #;
+ (all,i,IND)                          V1PTX(i) # Production tax revenue #;
+ (all,c,COM)                          V0MTX(c) # import tax revenue #;
+
+File BASEDATA # Flows Data File #;
+Read
+ USE        from file BASEDATA header "USE";
+ FACTOR     from file BASEDATA header "1FAC";
+ V0MTX      from file BASEDATA header "0TAR";
+ V1PTX      from file BASEDATA header "1PTX";
+
+! Excerpt 2 of TABLO input file: !
+! Useful aggregates of the base data !
+
+Coefficient
+ (all,c,COM)(all,u,USER) USE_S(c,u) # USE matrix, dom+imp together#;
+ (all,u,USER)            USE_CS(u)  # Total user expenditure on goods #;
+ (all,c,COM)(all,s,SRC)  SALES(c,s) # Total value of sales #;
+ (all,i,IND)             V1PRIM(i)  # Wages plus profits #;
+ (all,i,IND)             V1TOT(i)   # Industry Costs #;
+ (all,c,COM)             V0CIF(c)   # Aggregate imports at border prices #;
+Formula
+ (all,c,COM)(all,u,USER) USE_S(c,u) = sum{s,SRC,USE(c,s,u)};
+ (all,u,USER)            USE_CS(u)  = sum{c,COM,USE_S(c,u)};
+ (all,c,COM)(all,s,SRC)  SALES(c,s) = sum{u,USER,USE(c,s,u)};
+ (all,i,IND)             V1PRIM(i)  = sum{f,FAC,FACTOR(f,i)};
+ (all,i,IND)             V1TOT(i)   = V1PRIM(i) + sum{c,COM,USE_S(c,i)};
+ (all,c,COM)             V0CIF(c)   = SALES(c,"imp") - V0MTX(c);
+
+! Excerpt 3 of TABLO input file: !
+! Total demands for commodities !
+
+Variable
+ (all,c,COM)(all,s,SRC)(all,u,USER)
+                       x(c,s,u) # Demand by user u for good c, source s #;
+ (all,c,COM)(all,s,SRC) x0(c,s) # Total demand for good c, source s #;
+
+Equation E_x0
+ (all,c,COM)(all,s,SRC) SALES(c,s)*x0(c,s)= sum{u,USER,USE(c,s,u)*x(c,s,u)};
+
+! Excerpt 4 of TABLO input file: !
+! Import/Domestic sourcing decision for all non-export users!
+
+Variable
+ (all,c,COM)(all,s,SRC)       p(c,s) # User price of good c, source s #;
+ (all,c,COM)(all,u,IMPUSER) p_s(c,u) # User price of composite good c #;
+ (all,c,COM)(all,u,IMPUSER) x_s(c,u) # Use of composite good c #;
+
+Coefficient (parameter)
+ (all,c,COM) SIGMA(c) # elasticity of substitution: domestic/imported #;
+ (all,c,COM)(all,s,SRC)(all,u,IMPUSER) SRCSHR(c,s,u) # imp/dom shares #;
+Read SIGMA from file BASEDATA header "ARM";
+Formula (all,c,COM)(all,s,SRC)(all,u,IMPUSER)
+   SRCSHR(c,s,u) = USE(c,s,u)/USE_S(c,u);
+
+Equation E_x
+ (all,c,COM)(all,s,SRC)(all,u,IMPUSER)
+   x(c,s,u) = x_s(c,u) - SIGMA(c)*[p(c,s) - p_s(c,u)];
+
+Equation E_p_s
+ (all,c,COM)(all,u,IMPUSER) p_s(c,u) = sum{s,SRC, SRCSHR(c,s,u)*p(c,s)};
+
+! Excerpt 5 of TABLO input file: !
+! Demands for capital and labour !
+
+Variable
+ (all,i,IND) x1prim(i) # Industry demand for primary-factor composite #;
+ (all,i,IND) p1prim(i) # Price of primary factor composite #;
+ (all,i,IND) x1lab(i)  # Employment by industry #;
+             p1lab     # Economy-wide wage rate #;
+ (all,i,IND) x1cap(i)  # Current capital stock #;
+ (all,i,IND) p1cap(i)  # Rental price of capital #;
+
+Coefficient (parameter)
+ (all,i,IND) SIGMA1PRIM(i) # CES substitution, primary factors #;
+Read SIGMA1PRIM from file BASEDATA header "P028";
+
+Equation E_x1lab
+ (all,i,IND) x1lab(i) = x1prim(i) - SIGMA1PRIM(i)*[p1lab-p1prim(i)];
+
+Equation E_x1cap
+ (all,i,IND) x1cap(i) = x1prim(i) - SIGMA1PRIM(i)*[p1cap(i)-p1prim(i)];
+
+Equation E_p1prim
+ (all,i,IND) V1PRIM(i)*p1prim(i)
+              = FACTOR("Labour",i)*p1lab + FACTOR("Capital",i)*p1cap(i);
+
+! Excerpt 6 of TABLO input file: !
+! Demands for composite inputs to production !
+
+Variable
+ (all,i,IND) x1tot(i)  # Industry output #;
+ (all,i,IND) a1prim(i) # All primary-factor augmenting technical change #;
+ (all,i,IND) p1tot(i)  # Unit cost of production #;
+
+Equation E_x1 # demand for commodity composites #
+ (all,c,COM)(all,i,IND)  x_s(c,i)= x1tot(i);
+
+Equation E_x1prim # demand for primary-factor composites #
+ (all,i,IND) x1prim(i) = a1prim(i) + x1tot(i);
+
+Equation E_p1tot # cost of production = cost of all inputs #
+ (all,i,IND)               V1TOT(i)*[p1tot(i)+ x1tot(i)] =
+    sum{c,COM,sum{s,SRC, USE(c,s,i)*[p(c,s)  + x(c,s,i)]}}
+               + FACTOR("Labour",i)*[p1lab   + x1lab(i)]
+              + FACTOR("Capital",i)*[p1cap(i)+ x1cap(i)];
+
+! Excerpt 7 of TABLO input file: !
+! Household demands !
+
+Variable
+ p3tot # Consumer price index #;
+ x3tot # Real household consumption #;
+ w3tot # Nominal total household consumption #;
+
+Equation E_x3
+ (all,c,COM) x_s(c,"Households") +  p_s(c,"Households") = w3tot;
+
+Equation E_x3tot
+ USE_CS("Households")*x3tot
+   = sum{c,COM, USE_S(c,"Households")*x_s(c,"Households")};
+
+Equation E_p3tot
+ USE_CS("Households")*p3tot
+   = sum{c,COM, USE_S(c,"Households")*p_s(c,"Households")};
+
+! Excerpt 8 of TABLO input file: !
+! Export demands !
+
+Variable
+ (all,c,COM) pworld(c) # World prices, measured in foreign currency #;
+ (all,c,COM) f4q(c)    # Quantity shift in foreign demand #;
+             phi       # Exchange rate, (local $)/(foreign $) #;
+
+Coefficient (parameter)(all,c,COM) EXP_ELAST(c) # Export demand elasticities #;
+Read EXP_ELAST from file BASEDATA header "P018";
+
+Equation E_x4a (all,c,COM) x(c,"dom","Exports") =
+                    f4q(c) - ABS[EXP_ELAST(c)]*[{p(c,"dom")-phi}- pworld(c)];
+
+Equation E_x4b (all,c,COM) x(c,"imp","Exports") = 0;
+
+! Excerpt 9 of TABLO input file: !
+! Market clearing and prices for domestic commodities !
+
+Subset COM is subset of IND;
+
+Equation E_x1tot (all,c,COM) x1tot(c) = x0(c,"dom");
+
+Variable
+ (change)(all,c,COM) Delptxrate(c)  # Ordinary change in rate of domestic tax #;
+
+Equation E_pA
+ (all,c,COM)
+   p(c,"dom") = p1tot(c) + 100*[V1TOT(c)/(V1TOT(c)+V1PTX(c))]*Delptxrate(c);
+
+! Excerpt 10 of TABLO input file: !
+! Prices for imported commodities !
+
+Variable
+ (change)(all,c,COM) Delmtxrate(c)  # Ordinary change in rate of import tax #;
+
+Equation E_pB
+(all,c,COM)
+   p(c,"imp") = pworld(c)+phi + 100*[V0CIF(c)/SALES(c,"imp")]*Delmtxrate(c);
+
+! Excerpt 11 of TABLO input file: !
+! GDP from income side !
+
+Variable    w0gdpinc  # Nominal GDP from income side #;
+Coefficient V0GDPINC  # GDP from income side #;
+Formula     V0GDPINC = sum{i,IND, sum{f,FAC,  FACTOR(f,i)}}
+                     + sum{c,COM, V1PTX(c) + V0MTX(c)};
+Equation E_w0gdpinc
+V0GDPINC*w0gdpinc =
+  sum{i,IND, FACTOR( "Labour",i)*[p1lab    + x1lab(i)]}
+ +sum{i,IND, FACTOR("Capital",i)*[p1cap(i) + x1cap(i)]}
+ +sum{c,COM, 100*V1TOT(c)*Delptxrate(c) + V1PTX(c)*[x1tot(c)+ p1tot(c)]}
+ +sum{c,COM, 100*V0CIF(c)*Delmtxrate(c) + V0MTX(c)*[x0(c,"imp")+pworld(c)+phi]};
+
+! Excerpt 12 of TABLO input file: !
+! Expenditure-side GDP measures !
+
+Variable
+ w0gdpexp  # Nominal GDP from expenditure side #;
+ p0gdpexp  # GDP price index, expenditure side #;
+ x0gdpexp  # Real GDP from expenditure side #;
+
+Coefficient
+ V0GDPEXP # GDP from expenditure side #;
+Formula
+ V0GDPEXP = sum{c,COM, sum{s,SRC,sum{u,FINALUSER, USE(c,s,u)}} - V0CIF(c)};
+
+Equation E_w0gdpexp
+ V0GDPEXP*w0gdpexp =
+   sum{c,COM, sum{s,SRC,sum{u,FINALUSER, USE(c,s,u)*[p(c,s)+x(c,s,u)]}}
+     - V0CIF(c)*[x0(c,"imp")+ pworld(c)+phi]};
+
+Equation E_p0gdpexp
+ V0GDPEXP*p0gdpexp =  sum{c,COM,
+   sum{s,SRC,sum{u,FINALUSER, USE(c,s,u)*p(c,s)}}  - V0CIF(c)*[pworld(c)+phi]};
+
+Equation E_x0gdpexp x0gdpexp = w0gdpexp - p0gdpexp;
+
+! Excerpt 13 of TABLO input file: !
+! More macro variables !
+
+Variable
+ x4tot # Export volume index #;
+ p4tot # Export price index #;
+ p2tot # Investment price index #;
+ x0cif_c # Import volume index, CIF prices #;
+(change) delB # (Balance of trade)/GDP #;
+
+Equation E_x4tot
+    sum{c,COM,  USE(c,"dom","Exports")*[x4tot - x(c,"dom","Exports")]} = 0;
+
+Equation E_p4tot
+    sum{c,COM,  USE(c,"dom","Exports")*[p4tot - p(c,"dom")]} = 0;
+
+Equation E_p2tot
+    sum{c,COM, sum{s,SRC, USE(c,s,"Investment")*[p2tot - p(c,s)]}} = 0;
+
+Equation E_x0cif_c
+    sum{c,COM, V0CIF(c)*[x0cif_c  - x0(c,"imp")]}=0;
+
+Equation E_delB
+ 100*V0GDPEXP*delB=
+   sum{c,COM,  USE(c,"dom","Exports")*[p(c,"dom")+x(c,"dom","Exports")-w0gdpexp]
+     - V0CIF(c)*[x0(c,"imp")+ pworld(c)+phi-w0gdpexp]};
+
+! Excerpt 14 of TABLO input file: !
+! Variables to assist factor market closure !
+
+Variable    realwage # Wage rate deflated by CPI #;
+              employ # Aggregate employment #;
+ (all,i,IND) gret(i) # Gross rate of return #;
+
+Equation E_realwage  realwage =  p1lab - p3tot;
+
+Equation E_employ    sum{i,IND, FACTOR("Labour",i)*[employ - x1lab(i)]}=0;
+
+Equation E_gret      (all,i,IND) gret(i) = p1cap(i) - p2tot;
+
+
+! Excerpt 15 of TABLO input file: !
+! Updating rules !
+
+Update
+ (all,c,COM)(all,s,SRC)(all,u,USER) USE(c,s,u)          = p(c,s)*x(c,s,u);
+ (all,i,IND)                        FACTOR("Labour",i)  = p1lab*x1lab(i);
+ (all,i,IND)                        FACTOR("Capital",i) = p1cap(i)*x1cap(i);
+ (change)(all,c,COM) V0MTX(c) =
+    V0CIF(c)*Delmtxrate(c) + 0.01*V0MTX(c)*[x0(c,"imp")+ pworld(c)+phi];
+ (change)(all,c,COM) V1PTX(c) =
+    V1TOT(c)*Delptxrate(c) + 0.01*V1PTX(c)*[x1tot(c)+ p1tot(c)];
+
+! Excerpt 16 of TABLO input file: !
+! Summarize and check data !
+
+File (new) SUMMARY # output file for summary data #;
+
+Coefficient (all,c,COM) CHECK(c) # (costs + tax) - sales : should = 0 #;
+Formula     (all,c,COM) CHECK(c) = V1TOT(c) + V1PTX(c) - SALES(c,"dom");
+
+Set COSTCAT # cost categories # = SRC union FAC;
+Coefficient
+(all,c,COSTCAT)(all,i,IND) COSTMAT(c,i) # Summary of industry costs #;
+Formula
+(all,i,IND)(all,s,SRC) COSTMAT(s,i) = sum{c,COM,USE(c,s,i)};
+(all,i,IND)(all,f,FAC) COSTMAT(f,i) = FACTOR(f,i);
+
+Write
+ CHECK     to file SUMMARY header "CHEK";
+ COSTMAT   to file SUMMARY header "COST";
+ SALES     to file SUMMARY header "SALE";
+ V1PRIM    to file SUMMARY header "1PRM";
+ V1TOT     to file SUMMARY header "1TOT";
+ V0CIF     to file SUMMARY header "0CIF";
+ V0GDPEXP  to file SUMMARY header "GDPE";
+ V0GDPINC  to file SUMMARY header "GDPI";
+
+! Excerpt 17 of TABLO input file: !
+! More summary data !
+
+Set MAINUSER # broad user groups # 
+  (Intermediate, Investment, Households, Government, Exports);
+Subset FinalUser is subset of MAINUSER;
+Coefficient
+ (all,c,COM)(all,u,MAINUSER) MAINSALES(c,u) # Summary of sales #;
+Formula
+ (all,c,COM) MAINSALES(c,"Intermediate") = sum{i,IND,USE(c,"dom",i)};
+ (all,c,COM)(all,u,FINALUSER) MAINSALES(c,u) = USE(c,"dom",u);
+
+Coefficient (all,i,IND) CAPSHR(i) # Share of capital in primary factor costs #;
+Formula     (all,i,IND) CAPSHR(i) = FACTOR("capital",i)/V1PRIM(i);
+
+Coefficient (all,c,COM) IMPSHR(c) # Share imports in local purchases #;
+Formula
+(all,c,COM) IMPSHR(c) = sum{u,IMPUSER,USE(c,"imp",u)}/sum{u,IMPUSER,USE_S(c,u)};
+
+Write
+ MAINSALES to file SUMMARY header "MSAL";
+ CAPSHR    to file SUMMARY header "KSHR";
+ IMPSHR    to file SUMMARY header "MSHR";
+
+! end of file !

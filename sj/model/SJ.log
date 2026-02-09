@@ -1,0 +1,249 @@
+ 
+ <TABLO  Version 7.0   August 2018>
+   This program accesses some of the routines in the GEMPACK software release
+ <GEMPACK Release 12.0.003   February 2019>
+  
+ Licence file: C:\GP\licen.gem
+  
+ Licence activation checked.
+ Licence is Activated
+ 
+     -------------------------------------------------------
+    !            GEMPACK Software System Licence            !
+    !  Source Code Licence for the GEMPACK Software System  !
+    !                 Licence No.  GFM-1643                 !
+    !          Licence for Release 12.0 of GEMPACK          !
+    !              The Thailand Research Fund               !
+    !                Phyathai, Bangkok 10400                !
+     -------------------------------------------------------
+ 
+ 
+     << COPYRIGHT 1987-2018: CoPS/Impact and KPSOFT >>
+ 
+  Current directory is: G:\My Drive\My Training\ADB Courses\Computable General Equilibrium\cge\sj
+  
+ 
+  Full path name of running EXE is: C:\GP\tablo.exe
+  Fortran compiler = GF64   version 6.4.0 64 bit
+  BLAS library: OpenBlas
+  OPENMP number of threads: 8
+  Gempack source corresponds to revision 907.
+  Operating System is Microsoft Windows 11 Home
+ 
+ 
+  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 
+ 
+                    TABLO OPTIONS
+               ( --> indicates those in effect )
+ 
+       BAT Run in batch              STI Take inputs from a Stored-input file
+       BPR Brief prompts             SIF Store inputs on a file
+       LOG Output to log file        ASI Add to incomplete Stored-input file
+ 
+       First stage                   Last Stage
+   --> F1 CHECK                      L1 CHECK
+       F2 CONDENSATION               L2 CONDENSATION
+       F3 CODE GENERATION        --> L3 CODE GENERATION
+  
+       RMS Require maximum set sizes to be specified
+       NTX Dont store TAB file on Auxiliary file
+       ICT Ignore Condensation statements on TAB file
+       ASB All Substitutions treated as Backsolves
+       NWT Add Newton-correction terms to levels equations
+       ACD Always use Change Differentiation of levels equations
+       SCO Specialized Check Options menu
+   Select an option   :  <opt>      Deselect an option      : -<opt>
+   Help for an option : ?<opt>      Help on all options     : ??
+   Redisplay options  : /           Finish option selection : Carriage return
+ Your selection >
+ 
+  
+ bat
+ Running in batch
+ Your selection >
+ 
+  
+ 
+ 
+ Name of TABLO input file :
+ ------------------------
+   (Suffix '.tab' will be automatically appended.)
+ 
+  
+ SJ
+ (Opened, as text, existing file 'SJ.tab'.)
+ 
+ Name of Information file :
+ ------------------------
+ 
+  Input the full name (excluding suffix) of this file.
+   (The suffix '.inf' will be appended automatically to your input.)
+    Enter a CARRIAGE-RETURN to use the name 'SJ'.
+ 
+  
+ 
+ (Opened new print file 'SJ.inf'.)
+ 
+ Note that this implementation will be known by the name 'SJ'.
+ Licence file: C:\GP\licen.gem
+  
+ Licence activation checked.
+ Licence is Activated
+ 
+ 
+ --> Starting CHECK stage
+  (Beginning preliminary pass of your TABLO Input file.)
+ 
+  NUMIG = 204, NUMZD = 0.
+  NUMST = 3, NUMSS = 1.
+  NUMFL = 1, NUMDS = 0.
+  NUMRD = 42, NUMWR = 0.
+  NUMCS = 42, NUMVC = 23.
+  TCSIND = 151, TVCIND = 210.
+  NUMEQ = 12, NUMFM = 39.
+  NUMUD = 41, NUMTR = 0.
+  NUMOMT = 0, NUMBST = 0.
+  NUMCP = 0, NUMMF = 0.
+  NumVCDefVPQTypeStrings = 0, NumCSDefVPQTypeStrings = 0.
+  (Beginning the check of your TABLO Input file.)
+  (After 50 statements, total number of errors is 0.)
+ 
+  (After 52 statements, total number of errors is 0.)
+ 
+  NUMIG = 63, NUMZD = 0.
+  NUMST = 3, NUMSS = 1.
+  NUMFL = 1, NUMDS = 0.
+  NUMRD = 3, NUMWR = 0.
+  NUMCS = 13, NUMVC = 11.
+  TCSIND = 151, TVCIND = 210.
+  NUMEQ = 10, NUMFM = 10.
+  NUMUD = 11, NUMTR = 0.
+  NUMOMT = 0, NUMBST = 0.
+  NUMCP = 0, NUMMF = 0.
+  NumVCDefVPQTypeStrings = 0, NumCSDefVPQTypeStrings = 0.
+  (Checking for duplicate name use.)
+  (Checking coefficient initialization.)
+ 
+ 
+ INPUT CHECK SUMMARY
+ -------------------
+ 
+  Total number of statements is 63.
+  There are NO syntax errors or semantic problems.
+ 
+  Do you want to see a SUMMARY of the model        [s], or
+              perform CONDENSATION                 [c], or
+              proceed to AUTOMATIC CODE GENERATION [a], or
+              EXIT from TABLO                      :
+ 
+   (Enter a carriage return to proceed directly
+    to AUTOMATIC CODE GENERATION)
+ 
+  
+ a
+ 
+ --> Starting CODE GENERATION
+ 
+ 
+                          TABLO PORTABLE
+                CODE OPTIONS   ( --> indicates those in effect )
+ 
+       NEQ Do no equations           PGS Prepare output for GEMSIM
+       NDS Do no displays        --> WFP Write a Fortran Program
+       NWR Do no writes                    (i.e. a TABLO-generated program)
+                                 --> FC5 Fast Compile TG-prog under LF95
+       ACC All comment lines in      NMS Don't allow simulations
+              code
+                                     CIN Code file name same as
+                                           Information file name
+                                     CDM Old option. Has no effect.
+                                     NRZ No run-time reports re use of
+                                            ZERODIVIDE default values
+                                     NXS No "extra" statements allowed
+ 
+   Select an option   :  <opt>      Deselect an option      : -<opt>
+   Help for an option : ?<opt>      Help on all options     : ??
+   Redisplay options  : /           Finish option selection : Carriage return
+  Your selection >
+ 
+  
+ WFP
+ Writing a Fortran (i.e. TABLO-generated) program
+  Your selection >
+ 
+  
+ 
+ 
+  PROGRAM FOR THIS MODEL
+  ----------------------
+ 
+  Input the full name (excluding suffix) of this file.
+   (The suffix '.for' will be appended automatically to your input.)
+    Enter a CARRIAGE-RETURN to use the name 'SJ'.
+ 
+  
+ SJ
+ (Opened new print file 'SJ.for'.)
+ Licence file: C:\GP\licen.gem
+  
+ Licence activation checked.
+ Licence is Activated
+ 
+ (Opened new header file 'SJ.axt'.)
+ (Opened new print file 'SJ.f9m'.)
+ (Opened new print file 'SJ_c1.for'.)
+ (Opened new print file 'SJ_c3.for'.)
+ (Opened new print file 'SJ_c5.for'.)
+ (Opened new print file 'SJ_c6.for'.)
+ (Opened new print file 'SJ_c0.for'.)
+ (Opened new print file 'SJ_u1.for'.)
+ (Opened new print file 'SJ_u3.for'.)
+ (Opened new print file 'SJ_u5.for'.)
+ (Opened new print file 'SJ_u6.for'.)
+ (Opened new print file 'SJ_u0.for'.)
+ (Opened new print file 'SJ_v1.for'.)
+ (Opened new print file 'SJ_v5.for'.)
+ (Opened new print file 'SJ_v6.for'.)
+ (Opened new print file 'SJ_v3.for'.)
+ (Opened new print file 'SJ_v0.for'.)
+ (Opened new print file 'SJ_m0.for'.)
+ (Opened new binary file 'SJ.axs'.)
+ 
+  (Beginning code for reads, formulas, writes, displays etc.)
+ 
+  (Beginning code for the equations.)
+ 
+  (Number of equations is 27.)
+  (Number of unknowns in the equations is 29.)
+ 
+  (Beginning code for the updates.)
+ 
+  (Organising the code files.)
+  (Total number of lines of code is 6165.)
+ (Opened new text file 'SJ.min'.)
+ (Model Information file is 'SJ.min'.)
+ 
+ Expression lengths in submatrices in the condensed equation system have been written to file SJ-ceqexplen.har
+ (Written real array, size 10x11, header "CLEN".)
+ 10 character strings, each of length 20 written. Header "CENM".
+ 11 character strings, each of length 15 written. Header "CVNM".
+ 
+  (Total number of programs written is 1.)
+ 
+  *******************************************************************
+  Successful completion of TABLO.
+  The program is
+    'SJ.for'.
+ 
+  This program
+      o can create the Equations file
+      o can carry out multi-step simulations
+ 
+  *******************************************************************
+ (Information file is 'SJ.inf'.)
+ 
+  (The program has completed without error.)
+  (The program has completed without warnings.)
+  
+  Total elapsed time is:  9 seconds.

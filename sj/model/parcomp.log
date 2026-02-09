@@ -1,0 +1,79 @@
+Running up to 8 compiles at once, with each compile doing up to 3 files.
+Entering event loop, 0 tasks running; delay = 100
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "sj_c1.for" "sj_u1.for" "sj_v1.for"
+Entering event loop, 1 tasks running; delay = 120
+Entering event loop, 1 tasks running; delay = 144
+Entering event loop, 1 tasks running; delay = 173
+Entering event loop, 1 tasks running; delay = 208
+Entering event loop, 1 tasks running; delay = 250
+Entering event loop, 1 tasks running; delay = 300
+Entering event loop, 1 tasks running; delay = 360
+Task 1 done, created 1 sj_c1.o 2 sj_u1.o 3 sj_v1.o
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "sj_c3.for" "sj_c5.for" "sj_c6.for"
+Launched slot 2: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "sj_u3.for" "sj_u5.for" "sj_u6.for"
+Launched slot 3: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "sj_v3.for" "sj_v5.for" "sj_v6.for"
+Entering event loop, 3 tasks running; delay = 360
+Entering event loop, 3 tasks running; delay = 432
+Entering event loop, 3 tasks running; delay = 500
+Task 1 done, created 4 sj_c3.o 5 sj_c5.o 6 sj_c6.o
+Task 2 done, created 7 sj_u3.o 8 sj_u5.o 9 sj_u6.o
+Task 3 done, created 10 sj_v3.o 11 sj_v5.o 12 sj_v6.o
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "sj_c0.for" "sj_u0.for" "sj_v0.for"
+Launched slot 2: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "sj__2.for"
+Entering event loop, 2 tasks running; delay = 400
+Entering event loop, 2 tasks running; delay = 480
+Task 1 done, created 13 sj_c0.o 14 sj_u0.o 15 sj_v0.o
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "sj_m0.for"
+Entering event loop, 2 tasks running; delay = 480
+Task 1 done, created 16 sj_m0.o
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "sj__1.for"
+Entering event loop, 2 tasks running; delay = 480
+Entering event loop, 2 tasks running; delay = 500
+Entering event loop, 2 tasks running; delay = 500
+Task 2 done, created 17 sj__2.o
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Entering event loop, 1 tasks running; delay = 500
+Task 1 done, created 18 sj__1.o
+Finished OK 31.8 seconds 8 separate tasks

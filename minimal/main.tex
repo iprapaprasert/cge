@@ -1,0 +1,154 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage[letter, margin=1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{stix2}
+\usepackage{mathrsfs}
+\usepackage{setspace}
+\usepackage{comment}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{longtable}
+\usepackage{algorithm2e}
+\usepackage{tikz} 
+\usepackage{lipsum}
+\usepackage[utf8]{inputenc}
+\usepackage[most]{tcolorbox}
+
+\title{\texttt{MINIMAL} Cheatsheet}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Set}
+\begin{tabular}{lcl}
+    \toprule
+    \textbf{Set} & \textbf{Dimension} & \textbf{Description} \\
+    \midrule
+    \multicolumn{3}{l}{\textit{Columns of the Input-Output Table}} \\ \cmidrule{1-3}
+    \texttt{IND} & 7 & $\texttt{IND} = \{\text{AgricMining},\ldots,\text{Services} \}$ \\
+    \texttt{FINALUSER} & 4 & $\texttt{FINALUSER} = \{\text{Investment},\ldots,\text{Exports} \}$  \\
+    \texttt{USER} & $7+4=11$ & \texttt{IND} $\cup$ \texttt{FINALUSER} \\
+    && $\texttt{IMPUSER} \subset \texttt{USER}$ \\
+    \texttt{IMPUSER} & $7+3=10$ & \texttt{IND} $\cup$ (\texttt{FINALUSER} $\setminus$ \{\text{Exports}\}) \\
+    && $\texttt{IND} \subset \texttt{IMPUSER}$ \\
+    \cmidrule{1-3}
+    \multicolumn{3}{l}{\textit{Rows of the Input-Output Table}} \\ \cmidrule{1-3}
+    \texttt{COM} & 7 & $\texttt{COM} = \{\text{AgricMining},\ldots,\text{Services} \}$ \\
+    \texttt{SRC} & 2 & $\texttt{SRC} = \{\text{dom},\text{imp} \}$  \\
+    \texttt{FAC} & 2 & $\texttt{FAC} = \{\text{Labour},\text{Capital} \}$ \\    
+    \bottomrule
+\end{tabular}
+
+\section{Coefficient}
+\subsection{Coefficient from header}
+\begin{tabular}{llll}
+    \toprule
+    \textbf{Coefficient} & \textbf{Dimension} & \textbf{Description} &
+    \textbf{Header}
+    \\
+    \midrule
+    \texttt{USE(c,s,u)} & $\texttt{COM} \times \texttt{SRC} \times \texttt{USER}$ & Expenditure on commodity \texttt{c} from source \texttt{s} by user \texttt{u} & \texttt{BASEDATA} \to \texttt{USE} \\
+    \texttt{FACTOR(f,i)} & $\texttt{FAC} \times \texttt{IND}$ & Expenditure on factor \texttt{f} by industry \texttt{i} & \texttt{BASEDATA} \to \texttt{1FAC} \\
+    \texttt{V1PTX(i)} & \texttt{IND} & Lump-sum production tax paid by industry \texttt{i} & \texttt{BASEDATA} \to \texttt{1PTX} \\
+    \texttt{V0MTX(c)} & \texttt{COM} & Lump-sum import tariff of commodity \texttt{c} & \texttt{BASEDATA} \to \texttt{0TAR} \\
+    \texttt{SIGMA(c)} & \texttt{COM} & Elasticity of substitution between source of commodity \texttt{c} & \texttt{BASEDATA} \to \texttt{ARM} \\
+    \texttt{SIGMA1PRIM(i)} & \texttt{IND} & Elasticity of substitution between factor \texttt{f} & \texttt{BASEDATA} \to \texttt{P028} \\
+    \bottomrule
+\end{tabular}
+
+\subsection{Coefficient defined by formula}
+\begin{tabular}{llp{6.5cm}l}
+    \toprule
+    \textbf{Coefficient} & \textbf{Dimension} & \textbf{Description} &
+    \textbf{Formula} \\
+    \midrule
+    \texttt{USE\_S(c,u)} & $\texttt{COM}\times\texttt{USER}$ & Expenditure on commodity \texttt{c} from all sources by user \texttt{u} & $\sum\limits_\texttt{s}^\texttt{SRC}\texttt{USE(c,s,u)}$ \\
+    \texttt{USE\_CS(u)} & $\texttt{USER}$ & Expenditure on all commodities by user \texttt{u} & $\sum\limits_\texttt{c}^\texttt{COM}\texttt{USE\_S(c,u)}$ \\
+    \texttt{SALES(c,s)} & $\texttt{COM}\times\texttt{SRC}$ & Sales of commodities \texttt{c} from source \texttt{s} & $\sum\limits_\texttt{u}^\texttt{USER}\texttt{USE(c,s,u)}$ \\
+    \texttt{V1PRIM(i)} & $\texttt{IND}$ & Expenditure on all factors paid by industry \texttt{i} & $\sum\limits_\texttt{f}^\texttt{FAC}\texttt{FACTOR(f,i)}$ \\
+    \texttt{V1TOT(i)} & $\texttt{IND}$ & Expenditure on all factors and all commodities from all sources paid by industry \texttt{i} & $\texttt{V1PRIM(i)} + \sum\limits_\texttt{c}^\texttt{COM}\texttt{USE\_S(c,i)}$ \\
+    \texttt{V0CIF(c)} & $\texttt{COM}$ & Sales of imported commodity \texttt{c} before imposing import tariff (Imports at border price)  & $\texttt{SALES(c,"imp")}  - \texttt{V0MTX(c)}$ \\
+    \texttt{SRCSHR(c,s,u)} & $\texttt{COM}\times\texttt{SRC}\times\texttt{USER}$ & Share of expenditure on commodity \texttt{c} from source \texttt{s} to expenditure on commodity \texttt{c} from all sources by user \texttt{u} & $\dfrac{\texttt{USE(c,s,u)}}{\texttt{USE\_S(c,u)}}$ \\
+    \bottomrule
+\end{tabular}
+
+\section{Variable}
+\textit{Variable} in CGE model must be defined as percentage-change or linearized variables. We use lowercase to identify these kind of variables. To update variables, we use syntax \textit{EQUATION}. 
+
+\subsection{Linearized patterns}
+Note that
+\begin{equation}
+    y=\frac{dY}{Y}\times100
+\end{equation}
+Mathematics of change
+\begin{equation}
+    dY=\frac{Yy}{100}
+\end{equation}
+and
+\begin{align}
+    \frac{d\log Y}{dY} &= \frac{1}{Y} \\
+    \frac{dY}{Y}\times 100 &= d\log Y\times100 \\
+    y &= d\log Y\times100 \\
+\end{align}
+To convert level form into linearized form, we apply total differential
+\begin{equation}
+    z=f(x,y) \Longrightarrow dz= f'_1(x,y)dx+f'_2(x,y)dy
+\end{equation}
+Example:
+\begin{align}
+    Y = X^2+Z \Longrightarrow dY=2XdX+dZ
+\end{align}
+Recall that $dy = \dfrac{Yy}{100}$. Hence,
+\begin{align}
+    Y = X^2+Z \Longrightarrow dY &= 2XdX+dZ \\
+    \frac{Yy}{100} &= 2X\frac{Xx}{100} + \frac{Zz}{100} \\
+    Yy &= 2XXx + Zz \\
+\end{align}
+
+Proof
+Linearized $Y=X+Z$
+Apply differential and get
+\begin{align}
+    dY &= dX + dZ \\
+    Yy &= Xx + Zz 
+\end{align}
+
+\begin{tabular}{ll}
+    \toprule
+    \textbf{Level Form} & \textbf{Intermediate Form}
+    \\
+    \midrule
+    $Y = X+Z$ & $Yy = Xx + Zz$ & \\
+    \bottomrule
+\end{tabular}
+
+
+\begin{longtable}[l] {p{0.5in} p{0.7in} p{1.8in} p{0.7in} p{2in}} 
+    \renewcommand{\arraystretch}{1.2}
+    \multicolumn{4}{l}{}\\
+    \toprule
+    \textbf{Variable} & \textbf{Dimension} & \textbf{Description} &
+    \textbf{Equation Name} & \textbf{Equation} \\
+    \midrule
+    \texttt{x(c,s,u)}  & $\texttt{COM}\times\texttt{SRC}\times\texttt{USER}$ & Quantity demand on commodity \texttt{c} from source \texttt{s} by user \texttt{u}    & \texttt{E\_x}                                 & $ \texttt{x(c,s,u)}=\texttt{x\_s(c,u)} - \texttt{SIGMA(c)}(\texttt{p(c,s)-\texttt{p\_s(c,u)})}$ \text{if} \texttt{u} \in \texttt{IMPUSER} \\
+    \texttt{x0(c,s)}   & $\texttt{COM}\times\texttt{SRC}$                    & Quantity supply of commodity \texttt{c} from source \texttt{s}                       & \texttt{E\_x0}                                & $\texttt{SALE(c,s)}\texttt{x0(c,s)}= \sum\limits_\texttt{u}^\texttt{USER}\texttt{USE(c,s,u)x(c,s,u)}$  \\
+    \texttt{p(c,s)}    & $\texttt{COM}\times\texttt{SRC}$                    & Price of commodity \texttt{c} from source \texttt{s}                                 &  \\
+    \texttt{p\_s(c,u)} & $\texttt{COM}\times\texttt{IMPUSER}$                & Price of commodity \texttt{c} from all source faced by imported user \texttt{u}      & \texttt{E\_p\_s}                              & $\texttt{p\_s(c,u)} = \sum\limits_{\texttt{s}}^{\texttt{SRC}}\texttt{SRCSHR(c,s,u)p(c,s)}$  \\
+    \texttt{x\_s(c,u)} & $\texttt{COM}\times\texttt{IMPUSER}$                & Quantity demand on commodity \texttt{c} from all sources by imported user \texttt{u} & \texttt{E\_x1} if \texttt{u} \in \texttt{IND} & $\texttt{x_s(c,i)} = \texttt{x1tot(i)}$ \\
+    \texttt{x1prim(i)} & \texttt{IND}                                        & Quantity demand on factors by industry \texttt{i}                                    & \texttt{E\_x1prim}                            & $\texttt{x1prim(i)} = \texttt{a1prim(i)} + \texttt{x1tot(i)}$  \\
+    \texttt{p1prim(i)} & \texttt{IND}                                        & Price of factors faced by industry \texttt{i}                                        & \texttt{E\_p1prim}                            & $\texttt{V1PRIM(i)p1prim(i)} = \texttt{FACTOR("Labour",i)p1lab} + \texttt{FACTOR("Capital",i)p1cap(i)}$ \\
+    \texttt{x1lab(i)}  & \texttt{IND}                                        & Quantity demand of labor faced by industry \texttt{i}                                & \texttt{E\_x1lab}                             & $\texttt{x1lab(i)} = \texttt{x1prim(i)} - \texttt{SIGMA1PRIM(i)}\left(\texttt{p1lab} - \texttt{p1prim(i)}\right)$ \\
+    \texttt{p1lab}     & 1                                                   & Price of labor & \\
+    \texttt{x1cap(i)}  & \texttt{IND}                                        & Quantity demand of capital faced by industry \texttt{i}                              & \texttt{E\_x1cap}                             & $\texttt{x1cap(i)} = \texttt{x1prim(i)} - \texttt{SIGMA1PRIM(i)}\left(\texttt{p1cap(i)} - \texttt{p1prim(i)}\right)$ \\
+    \texttt{p1cap(i)}  & \texttt{IND}                                        & Price of capital faced by industry \texttt{i} & \\
+    \texttt{x1tot(i)}  & \texttt{IND}                                        & Quantity output of industry \texttt{i}                                               &   \\
+    \texttt{a1prim(i)} & \texttt{IND}                                        & Productivity of factors in industry \texttt{i}                                       & \\
+    \texttt{p1tot(i)}  & \texttt{IND}                                        & Price of production faced by industry \texttt{i}                                     & \text{E\_p1tot}                               & \texttt{V1TOT(i)(p1tot(i)+x1tot(i))} = \sum_c^\texttt{COM}\sum_\texttt{s}^\texttt{SRC}\texttt{USE(c,s,i)(p(c,s)+x(c,s,i))} + \texttt{FACTOR("Labour", i)(p1lab+x1lab(i))} + \texttt{FACTOR("Capital", i)(p1cap(i)+x1cap(i))} \\
+    \bottomrule
+\end{longtable}
