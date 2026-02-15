@@ -1,0 +1,114 @@
+
+  Results shown in the extrapolation part of this file are
+   1-step,  2-step,  4-step  and extrapolated results.
+! (This Extrapolation Accuracy file is 'sjlb2.xac'.)
+
+ ! This file was created at 09:25:16 on 05-FEB-2026 by the program
+ !  <SJ.for 05-FEB-2026> [SJ.tab]
+ ! which accesses some of the routines in the GEMPACK software release
+ !  <GEMPACK Release 12.0.003   February 2019>
+ 
+ !     -------------------------------------------------------                
+ !    !            GEMPACK Software System Licence            !               
+ !    !  Source Code Licence for the GEMPACK Software System  !               
+ !    !                 Licence No.  GFM-1643                 !               
+ !    !          Licence for Release 12.0 of GEMPACK          !               
+ !    !              The Thailand Research Fund               !               
+ !    !                Phyathai, Bangkok 10400                !               
+ !     -------------------------------------------------------                
+    
+  Euler's Method.
+
+  CODE      MEANING
+  -----------------
+   
+   XMA      Three extrapolations equal to machine accuracy 
+   XRA      Three extrapolations equal to required accuracy
+   C0       Confidence that the result is zero             
+   FC0      Fair confidence that the result is zero        
+   CX       Confidence in the extrapolated result          
+   FCX      Fair confidence in the extrapolated result     
+   MVC      Monotonic, results very close together         
+   MN0      Monotonic, results near zero                   
+   MC?      Monotonic, appears to be converging            
+   MD?      Monotonic, but may be diverging                
+   MD!      Monotonic, but appears to be diverging         
+   OVC      Oscillating, but results very close together   
+   ON0      Oscillating, but results near zero             
+   OC?      Oscillating, but appears to be converging      
+   OD?      Oscillating and may be diverging               
+   OD!      Oscillating and appears to be diverging        
+
+
+  ---> EXTRAPOLATION RESULTS.
+
+        Cumulative results.
+   
+
+  -->  Variable p_Y  Total nominal household expenditure
+ p_Y                           5.50000         5.36515         5.29735         5.22929     CX  3 L5
+
+  -->  Variable p_PC(SECT)  Price of commodity i
+ p_PC(s1)                      0.00000         0.00000         0.00000         0.00000     XMA 6 L6
+ p_PC(s2)                     0.750000        0.745844        0.743773        0.741707     CX  4 L6
+
+  -->  Variable p_PF(FAC)  Price of factor f
+ p_PF(capital)                -4.50000        -4.41687        -4.37653        -4.33700     CX  3 L4
+
+  -->  Variable p_XCOM(SECT)  Total demand for (or supply of) commodity i
+ p_XCOM(s1)                    5.50000         5.36515         5.29735         5.22930     CX  3 L5
+ p_XCOM(s2)                    4.75000         4.60237         4.52848         4.45454     CX  4 L5
+
+  -->  Variable p_XFAC(FAC)  Total demand for (or supply of) factor f
+ p_XFAC(labor)                 2.50000         2.33067         2.24713         2.16434     CX  3 L4
+
+  -->  Variable p_XH(SECT)  Household demand for commodity i
+ p_XH(s1)                      5.50000         5.36515         5.29735         5.22929     CX  3 L5
+ p_XH(s2)                      4.75000         4.60237         4.52848         4.45454     CX  4 L5
+
+  -->  Variable p_XC(SECT,SECT)  Intermediate inputs of commodity i to industry j
+ p_XC(s1,s1)                   5.50000         5.36515         5.29735         5.22930     CX  3 L5
+ p_XC(s2,s1)                   4.75000         4.60237         4.52848         4.45454     CX  4 L5
+ p_XC(s1,s2)                   5.50000         5.36515         5.29735         5.22930     CX  3 L5
+ p_XC(s2,s2)                   4.75000         4.60237         4.52848         4.45454     CX  4 L5
+
+  -->  Variable p_XF(FAC,SECT)  Factor inputs to industry j
+ p_XF(labor,s1)                2.50000         2.33067         2.24713         2.16434     CX  3 L4
+ p_XF(capital,s1)              10.0000         10.0000         10.0000         10.0000     XMA 6 L6
+ p_XF(labor,s2)                2.50000         2.33067         2.24713         2.16434     CX  3 L4
+ p_XF(capital,s2)              10.0000         10.0000         10.0000         10.0000     XMA 6 L6
+
+  -->  Variable p_DVCOMIN(SECT,SECT)  Dollar value of inputs of commodity i to industry j
+ p_DVCOMIN(s1,s1)              5.50000         5.36515         5.29735         5.22930     CX  3 L5
+ p_DVCOMIN(s2,s1)              5.50000         5.36515         5.29735         5.22930     CX  3 L5
+ p_DVCOMIN(s1,s2)              5.50000         5.36515         5.29735         5.22930     CX  3 L5
+ p_DVCOMIN(s2,s2)              5.50000         5.36515         5.29735         5.22930     CX  3 L5
+
+  -->  Variable p_DVFACIN(FAC,SECT)  Dollar value of factor f used in industry j
+ p_DVFACIN(labor,s1)           5.50000         5.36515         5.29735         5.22930     CX  3 L5
+ p_DVFACIN(capital,s1)         5.50000         5.36515         5.29735         5.22930     CX  3 L5
+ p_DVFACIN(labor,s2)           5.50000         5.36515         5.29735         5.22930     CX  3 L5
+ p_DVFACIN(capital,s2)         5.50000         5.36515         5.29735         5.22930     CX  3 L5
+
+  -->  Variable p_DVHOUS(SECT)  Dollar value of household use of commodity i
+ p_DVHOUS(s1)                  5.50000         5.36515         5.29735         5.22929     CX  3 L5
+ p_DVHOUS(s2)                  5.50000         5.36515         5.29735         5.22929     CX  3 L5
+
+       SUMMARY OF CONVERGENCE RESULTS                  Number   Min Figs Agree
+       ------------------------------                  ------   --------------
+  XMA  Three extrapolations equal to machine accuracy       3         6
+  CX   Confidence in the extrapolated result               24         3
+
+  19 results are judged accurate to 3 figures.
+  5 results are judged accurate to 4 figures.
+  3 results are judged accurate to 6 figures.
+
+ Above is for linearised variables.
+ Below are for levels values of percent-change and change results.
+ 
+  4 results are judged accurate to 4 figures.
+  19 results are judged accurate to 5 figures.
+  4 results are judged accurate to 6 figures.
+
+ (The summary above covers the XAC-retained variables.)
+ 

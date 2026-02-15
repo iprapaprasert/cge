@@ -1,0 +1,158 @@
+ 
+ <TABLO  Version 7.0   August 2018>
+   This program accesses some of the routines in the GEMPACK software release
+ <GEMPACK Release 12.0.003   February 2019>
+  
+ Licence file: C:\GP\licen.gem
+  
+ Licence activation checked.
+ Licence is Activated
+ 
+     -------------------------------------------------------
+    !            GEMPACK Software System Licence            !
+    !  Source Code Licence for the GEMPACK Software System  !
+    !                 Licence No.  GFM-1643                 !
+    !          Licence for Release 12.0 of GEMPACK          !
+    !              The Thailand Research Fund               !
+    !                Phyathai, Bangkok 10400                !
+     -------------------------------------------------------
+ 
+ 
+     << COPYRIGHT 1987-2018: CoPS/Impact and KPSOFT >>
+ 
+  Current directory is: G:\My Drive\My Training\ADB Courses\Computable General Equilibrium\cge\minimal
+  
+ 
+  Full path name of running EXE is: C:\GP\tablo.exe
+  Fortran compiler = GF64   version 6.4.0 64 bit
+  BLAS library: OpenBlas
+  OPENMP number of threads: 8
+  Gempack source corresponds to revision 907.
+  Operating System is Microsoft Windows 11 Home
+ 
+ 
+  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 
+ 
+                    TABLO OPTIONS
+               ( --> indicates those in effect )
+ 
+       BAT Run in batch              STI Take inputs from a Stored-input file
+       BPR Brief prompts             SIF Store inputs on a file
+       LOG Output to log file        ASI Add to incomplete Stored-input file
+ 
+       First stage                   Last Stage
+   --> F1 CHECK                      L1 CHECK
+       F2 CONDENSATION               L2 CONDENSATION
+       F3 CODE GENERATION        --> L3 CODE GENERATION
+  
+       RMS Require maximum set sizes to be specified
+       NTX Dont store TAB file on Auxiliary file
+       ICT Ignore Condensation statements on TAB file
+       ASB All Substitutions treated as Backsolves
+       NWT Add Newton-correction terms to levels equations
+       ACD Always use Change Differentiation of levels equations
+       SCO Specialized Check Options menu
+   Select an option   :  <opt>      Deselect an option      : -<opt>
+   Help for an option : ?<opt>      Help on all options     : ??
+   Redisplay options  : /           Finish option selection : Carriage return
+ Your selection >
+ 
+  
+ bat
+ Running in batch
+ Your selection >
+ 
+  
+ L1
+  --> Last stage is CHECK
+ Your selection >
+ 
+  
+ ICT
+  -->  Ignore Condensation statements on TAB file
+ Your selection >
+ 
+  
+ MNC
+  -->  Will write MNC file
+ Your selection >
+ 
+  
+ 
+ 
+ Name of TABLO input file :
+ ------------------------
+   (Suffix '.tab' will be automatically appended.)
+ 
+  
+ minimal
+ (Opened, as text, existing file 'minimal.tab'.)
+ 
+ Name of Information file :
+ ------------------------
+ 
+  Input the full name (excluding suffix) of this file.
+   (The suffix '.inf' will be appended automatically to your input.)
+    Enter a CARRIAGE-RETURN to use the name 'minimal'.
+ 
+  
+ 
+ (Opened new print file 'minimal.inf'.)
+ 
+ Note that this implementation will be known by the name 'minimal'.
+ Licence file: C:\GP\licen.gem
+  
+ Licence activation checked.
+ Licence is Activated
+ 
+ 
+ --> Starting CHECK stage
+  (Beginning preliminary pass of your TABLO Input file.)
+ 
+  NUMIG = 482, NUMZD = 0.
+  NUMST = 9, NUMSS = 8.
+  NUMFL = 2, NUMDS = 0.
+  NUMRD = 98, NUMWR = 11.
+  NUMCS = 96, NUMVC = 64.
+  TCSIND = 490, TVCIND = 577.
+  NUMEQ = 30, NUMFM = 91.
+  NUMUD = 73, NUMTR = 0.
+  NUMOMT = 0, NUMBST = 0.
+  NUMCP = 0, NUMMF = 0.
+  NumVCDefVPQTypeStrings = 0, NumCSDefVPQTypeStrings = 0.
+  (Beginning the check of your TABLO Input file.)
+  (After 50 statements, total number of errors is 0.)
+  [Statement "COM is subset of USER ;" added by TABLO.]
+  (After 100 statements, total number of errors is 0.)
+ 
+  (After 143 statements, total number of errors is 0.)
+ 
+  NUMIG = 143, NUMZD = 0.
+  NUMST = 9, NUMSS = 9.
+  NUMFL = 2, NUMDS = 0.
+  NUMRD = 7, NUMWR = 11.
+  NUMCS = 21, NUMVC = 34.
+  TCSIND = 490, TVCIND = 577.
+  NUMEQ = 29, NUMFM = 16.
+  NUMUD = 5, NUMTR = 0.
+  NUMOMT = 0, NUMBST = 0.
+  NUMCP = 0, NUMMF = 0.
+  NumVCDefVPQTypeStrings = 0, NumCSDefVPQTypeStrings = 0.
+  (Checking for duplicate name use.)
+  (Checking coefficient initialization.)
+ 
+ 
+ INPUT CHECK SUMMARY
+ -------------------
+ 
+  Total number of statements is 143.
+  There are NO syntax errors or semantic problems.
+ (Model Information file is 'minimal.mnc'.)
+ (Opened new header file 'minimal.tbt'.)
+ (Information file is 'minimal.inf'.)
+ 
+  (The program has completed without error.)
+  (The program has completed without warnings.)
+  
+  Total elapsed time is:  6 seconds.

@@ -1,0 +1,224 @@
+
+!-------------------------------------------------------------------!
+!               Linearized TABLO Input file for the                 !
+!                       Stylized Johansen model                     !
+!                                                                   !
+!           following the description in Chapter 3 of the text      !
+!    "Notes and Problems in Applied General Equilibrium Economics"  !
+!       by P.Dixon, B.Parmenter, A.Powell and P.Wilcoxen [DPPW]     !
+!                published by North-Holland 1992.                   !
+!-------------------------------------------------------------------!
+
+!
+  Revised February 1998 to include "ORIG_LEVEL=" qualifiers
+    to take advantage of Release 6.0 of GEMPACK which can then 
+    report levels results as well as percentage change results.
+  Also to include "GE 0" qualifiers
+    to take advantage of Release 6.0 of GEMPACK which can then 
+    ensure that these never become negative in simulations
+    carried out with user-specified accurary.
+!
+
+! Text between exclamation marks is a comment.                      !
+! Text between hashes (#) is labelling information.                 !
+
+!-------------------------------------------------------------------!
+!      Sets                                                         !
+!-------------------------------------------------------------------!
+
+! Index values i=1,2 in DPPW correspond to the sectors called s1,s2.
+  Index values i=3,4 in DPPW correspond to the primary factors,
+  labor and capital.   The set SECT below doubles as the set of 
+  commodities  and the set of industries. !
+
+SET SECT # Sectors # (s1-s2)  ;
+
+SET FAC # Factors  # (labor, capital) ;
+
+SET NUM_SECT # Numeraire sector - sector 1 #  (s1) ;
+
+SUBSET  NUM_SECT is subset of SECT ;
+
+!-------------------------------------------------------------------!
+!  File                                                             !
+!-------------------------------------------------------------------!
+
+ FILE iodata # the input-output data for the model # ;
+
+!  In the DPPW names shown below,  : denotes subscript.             !
+!  Thus, for example,   x:j indicates that j is a subscript.        !
+
+!-------------------------------------------------------------------!
+!  Variables                                                        !
+!    (All are percentage changes in the relevant levels quantities) !
+!-------------------------------------------------------------------!
+
+ VARIABLE (ORIG_LEVEL=Y) p_Y  # Total household expenditure # 
+   ! This is also  y  in DPPW  !;
+
+ VARIABLE (ORIG_LEVEL=1) (all,i,SECT) p_PC(i)  # Price of commodities #
+   ! This is  p:i  (i=1,2)  in DPPW  !;
+
+ VARIABLE (ORIG_LEVEL=1) (all,f,FAC) p_PF(f)  # Price of factors #
+   ! This is  p:i  (i=3,4)  in DPPW  !;
+
+ VARIABLE (ORIG_LEVEL=DVCOM) (all,i,SECT) p_XCOM(i)  
+     # Total demand for (or supply of) commodities #
+   ! This is  x:i  (i=1,2)  in DPPW  !;
+
+ VARIABLE (ORIG_LEVEL=DVFAC) (all,f,FAC) p_XFAC(f)  
+     # Total demand for (or supply of) factors #
+   ! This is  x:i  (i=3,4)  in DPPW  !;
+
+ VARIABLE (ORIG_LEVEL=DVHOUS) (all,i,SECT) p_XH(i)  
+              # Household consumption of commodities #
+   ! This is  x:i0  (i=1,2) in DPPW  !;
+
+VARIABLE (ORIG_LEVEL=DVCOMIN) (all,i,SECT)(all,j,SECT) p_XC(i,j)  
+   # Intermediate commodity inputs #
+   ! This is  x:ij  (i,j=1,2)  in DPPW  !;
+
+ VARIABLE (ORIG_LEVEL=DVFACIN) (all,f,FAC)(all,j,SECT) p_XF(f,j)  
+   # Intermediate factor inputs #
+   ! This is  x:ij  (i=3,4; j=1,2)  in DPPW  !;
+
+!-------------------------------------------------------------------!
+!  Base data, updates and reads                                     !
+!   (Base data is as in Table E3.3.1 of DPPW)                       !
+!-------------------------------------------------------------------!
+
+ COEFFICIENT (GE 0)  (all,i,SECT)(all,j,SECT) DVCOMIN(i,j)  
+   # Dollar value of inputs of commodity i to industry j # ;
+ UPDATE (all,i,SECT)(all,j,SECT)
+      DVCOMIN(i,j) = p_PC(i)*p_XC(i,j) ;
+
+ COEFFICIENT (GE 0)    (all,f,FAC)(all,j,SECT) DVFACIN(f,j)  
+   # Dollar value of inputs of factor f to industry j # ;
+ UPDATE (all,f,FAC)(all,j,SECT)
+      DVFACIN(f,j) = p_PF(f)*p_XF(f,j) ;
+
+ COEFFICIENT (GE 0)   (all,i,SECT) DVHOUS(i)  
+   # Dollar value of household use of commodity i # ;
+ UPDATE (all,i,SECT)
+      DVHOUS(i) = p_PC(i)*p_XH(i) ;
+
+!-------------------------------------------------------------------!
+!  Reads from the data base                                         !
+!-------------------------------------------------------------------!
+
+ READ DVCOMIN FROM FILE iodata HEADER "CINP" ;
+ READ DVFACIN FROM FILE iodata HEADER "FINP" ;
+ READ DVHOUS  FROM FILE iodata HEADER "HCON" ;
+
+!-------------------------------------------------------------------!
+!  Other coefficients and formulas for them                         !
+!-------------------------------------------------------------------!
+
+ COEFFICIENT  Y    # Total nominal household expenditure # ;
+ FORMULA Y = SUM(i,SECT,DVHOUS(i)) ;
+
+ COEFFICIENT (all,i,SECT) DVCOM(i)  
+  # Dollar value of total demand for commodity i # ;
+ FORMULA   (all,i,SECT)
+    DVCOM(i) = SUM(j,SECT, DVCOMIN(i,j)) + DVHOUS(i) ;
+
+ COEFFICIENT (all,f,FAC) DVFAC(f)  
+  # Dollar value of total demand for factor f # ;
+ FORMULA   (all,f,FAC)
+    DVFAC(f) =  SUM(j,SECT,DVFACIN(f,j)) ;
+
+ COEFFICIENT(PARAMETER)   (all,i,SECT)(all,j,SECT) ALPHACOM(i,j)  
+# alpha(i,j) - commodity parameter in Cobb-Douglas production function # ;
+   ! It is equal to the initial share 
+     of commodity i in total inputs to industry j  
+     This is  alpha:ij  (i=1,2; j=1,2) in (E3.1.4) of DPPW ! 
+ FORMULA(INITIAL)  (all,i,SECT)(all,j,SECT)   
+               ALPHACOM(i,j) = DVCOMIN(i,j)/DVCOM(j) ;
+
+ COEFFICIENT(PARAMETER)   (all,f,FAC)(all,j,SECT) ALPHAFAC(f,j)  
+   # alpha(f,j) - factor parameter in Cobb-Douglas production function. #;
+   ! It is equal to the initial share 
+     of factor f in total inputs to industry j  
+     This is  alpha:ij  (i=3,4; j=1,2) in (E3.1.4) of DPPW !  
+ FORMULA(INITIAL)  (all,f,FAC)(all,j,SECT)   
+               ALPHAFAC(f,j) = DVFACIN(f,j)/DVCOM(j) ;
+ 
+ COEFFICIENT   (all,i,SECT)(all,j,SECT) BCOM(i,j)  
+   # beta(i,j) - share of industry j in total demand for commodity i # ; 
+   ! This is  beta:ij  (i=1,2; j=1,2) in (E3.2.4) of DPPW !  
+ FORMULA   (all,i,SECT)(all,j,SECT)   
+     BCOM(i,j) = DVCOMIN(i,j)/DVCOM(i) ;
+
+ COEFFICIENT   (all,i,SECT)  BHOUS(i)  
+   # beta(i,0) - share of households in total demand for commodity i # ; 
+   ! This is  beta:i0  (i=1,2) in (E3.2.4) of DPPW !  
+ FORMULA   (all,i,SECT) BHOUS(i) = DVHOUS(i)/DVCOM(i) ;
+
+ COEFFICIENT   (all,f,FAC)(all,j,SECT) BFAC(f,j)  
+   # beta(f,j) - share of industry j in total demand for factor f #; 
+   ! This is  beta:ij  (i=3,4; j=1,2) in (E3.2.5) of DPPW !  
+ FORMULA   (all,f,FAC)(all,j,SECT)   
+     BFAC(f,j) = DVFACIN(f,j)/DVFAC(f) ;
+
+!-------------------------------------------------------------------!
+!  Equations (Linearized)                                           !
+!-------------------------------------------------------------------!
+
+EQUATION  Consumer_demands ! (E3.2.1) in DPPW !
+    # Household expenditure functions #
+(all,i,SECT) p_XH(i) = p_Y - p_PC(i) ;
+
+EQUATION  Intermediate_com 
+! From (E3.2.2) with i=1,2 in DPPW. The term p_PC(j) is included 
+   because of (E3.2.3) in DPPW. !
+    # Intermediate demands for commodity i by industry j #
+(all,i,SECT)(all,j,SECT) p_XC(i,j) = p_XCOM(j) - (p_PC(i) - p_PC(j)) ;
+
+EQUATION  Factor_inputs
+! From (E3.2.2) with i=3,4 in DPPW. The term p_PC(j) is included 
+   because of (E3.2.3) in DPPW. !
+    # Factor input demand functions #
+(all,f,FAC)(all,j,SECT) p_XF(f,j) = p_XCOM(j) - (p_PF(f) - p_PC(j)) ;
+
+EQUATION  Price_formation   ! (E3.2.3) in DPPW !
+    # Unit cost index for industry j #
+(all,j,SECT) p_PC(j) = SUM(i,SECT,ALPHACOM(i,j)*p_PC(i)) +
+                               SUM(f,FAC,ALPHAFAC(f,j)*p_PF(f)) ;
+
+EQUATION Com_clear # Commodity market clearing #
+   (all,i,SECT) p_XCOM(i) =
+       BHOUS(i)*p_XH(i) +  SUM(j,SECT,BCOM(i,j)*p_XC(i,j)) 
+   ! This is (E3.2.4) in DPPW !  ;
+
+EQUATION Factor_use # Aggregate primary factor usage #
+   (all,f,FAC) p_XFAC(f) = SUM(j,SECT,BFAC(f,j)*p_XF(f,j))  
+   ! This is (E3.2.5) in DPPW !  ;
+
+EQUATION NUMERAIRE 
+             # Numeraire for the model is price of commodity 1 #
+   (all,i,NUM_SECT)  p_PC(i) = 0 
+   ! Alternatively, this could be written as   p_PC( "s1" ) = 0 !
+   ! This is (E3.2.6) in DPPW !  ;
+
+!-------------------------------------------------------------------!
+!      Balance check for data base                                  !
+!-------------------------------------------------------------------!
+
+  
+! In a balanced data base, total demand for commodity i, DVCOM(i) 
+   should equal DVCOST(i), the total cost of inputs to industry i !
+
+! To check that total demand = total costs to industry i
+   remove the strong comment markers ![[! ... !]]!
+   around  the following 7 lines   !
+
+![[! COEFFICIENT (all,i,SECT) DVCOST(i)
+   # Total cost of inputs to industry i# ;
+ FORMULA   (all,i,SECT)
+     DVCOST(i) = SUM(u,SECT,DVCOMIN(u,i)) + SUM(f,FAC,DVFACIN(f,i)) ;
+
+  ! Check that the values  of DVCOM and DVCOST are equal !
+  DISPLAY DVCOM ;
+  DISPLAY DVCOST ; !]]! 
+
+!---------end of TABLO Input file--------------------------------------!

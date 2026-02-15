@@ -1,0 +1,771 @@
+ 
+ This GEMPACK log file was created at 09:14:02 on 05-FEB-2026 by the program
+  <SJ.for 05-FEB-2026 (a TABLO-generated program)>
+ which accesses some of the routines in the GEMPACK software release
+  <GEMPACK Release 12.0.003   February 2019>
+ 
+ 
+ <SJ.for 05-FEB-2026 (a TABLO-generated program)>
+   This program accesses some of the routines in the GEMPACK software release
+ <GEMPACK Release 12.0.003   February 2019>
+ 
+ Licence file: C:\GP\licen.gem
+ 
+     -------------------------------------------------------
+    !            GEMPACK Software System Licence            !
+    !  Source Code Licence for the GEMPACK Software System  !
+    !                 Licence No.  GFM-1643                 !
+    !          Licence for Release 12.0 of GEMPACK          !
+    !              The Thailand Research Fund               !
+    !                Phyathai, Bangkok 10400                !
+     -------------------------------------------------------
+ 
+ 
+     << COPYRIGHT 1987-2018: CoPS/Impact and KPSOFT >>
+ 
+  Current directory is: G:\My Drive\My Training\ADB Courses\Computable General Equilibrium\cge\sj\shock
+ 
+ 
+  Full path name of running EXE is: G:\My Drive\My Training\ADB Courses\Computable General Equilibrium\cge\sj\model\SJ.exe
+  Fortran compiler = GF64   version 6.4.0 64 bit
+  BLAS library: OpenBlas
+  OPENMP number of threads: 8
+  Gempack source corresponds to revision 907.
+  Operating System is Microsoft Windows 11 Home
+ 
+ 
+  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 
+ 
+                    TABLO-GENERATED PROGRAM OPTIONS
+               ( --> indicates those in effect )
+ 
+       BAT Run in batch              STI Take inputs from a Stored-input file
+       BPR Brief prompts             SIF Store inputs on a file
+       LOG Output to log file        ASI Add to incomplete Stored-input file
+                                     CMF Take inputs from a Command file
+       EAA Echo all activity           SVX Select variables on XAC file (later)
+   --> CPU Report CPU times            RQF Required figures agreement (extrap)
+       NRP Don't reuse pivots        NIR Don't do solution iterative refinement
+                                 --> IZ1 Ignore zero coefficients in step 1
+                                     KZ2 Keep zero coefficients in steps 2,3 etc
+       NEQ Do no equations           NWE Don't warn how well equations solved
+       NDS Do no displays            SSI Several subintervals; extrap after each
+       NWR Do no writes              M28 Use MA28 routines (rather than MA48)
+       NAS Do no assertions          SUI Save updated formula(initial) data
+       NUD Do no final updates              Extra Options Screen
+       NSM Don't do simulation              --------------------
+       NWT Use Newton's method      DTO Display, Terminal/Text write Options
+       CR  Check-on-read options
+ 
+  Select an option   :  <opt>      Deselect an option      : -<opt>
+  Help for an option : ?<opt>      Help on all options     : ??
+  Redisplay options  : /           Finish option selection : Carriage return
+ 
+ (Opened, as text, existing file 'sjlb.cmf'.)
+  (Taking inputs from a command file.)
+ (Opened, as text, existing file 'sjlb.cmf'.)
+ 
+  !  (There is no CREATION information on this file.)
+ 
+ 
+  --> Reading the Command file.
+ 
+ !
+ ! The following GEMPACK Command file (usually called SJLB.CMF)
+ !  carries out a multi-step simulation
+ !  for the Stylized Johansen model.
+ 
+ !  Auxiliary files (usually tells which TAB file)
+ 
+ auxiliary files = sj ;
+ 
+ ! Data files
+ 
+ file iodata = ..\model\sj.har ;
+ updated file iodata = <cmf>.upd ;
+ 
+ ! Closure
+ 
+ exogenous p_xfac ;
+ rest endogenous ;
+ 
+ ! Solution method information
+ 
+ method = euler ;
+ steps = 1 2 4 ;
+ 
+ ! Simulation part
+ 
+ ! Name of Solution file is inferred from name of Command file.
+ ! (See section 2.5 of GPD-3.)
+ 
+ shock p_xfac("labor") = 10 ;
+ 
+ verbal description =
+ Stylized Johansen model. Standard data and closure.
+ 10 per cent increase in amount of labor.
+   (Capital remains unchanged.);
+ 
+ ! Options
+ 
+ extrapolation accuracy file = yes ;
+ log file = yes ;
+ 
+ ! End of Command file
+ 
+ 
+  (Finished reading the command file.)
+ 
+  Auxiliary Statement File
+  ---------------------
+ (Opened, as binary, existing file
+   'G:\My Drive\My Training\ADB Courses\Computable General Equilibrium\cge\sj\model\SJ.axs'.)
+ 
+  Auxiliary Table File
+  -----------------
+ (Opened, as header, existing file
+   'G:\My Drive\My Training\ADB Courses\Computable General Equilibrium\cge\sj\model\SJ.axt'.)
+ 
+  !  This file was created at 09:02:21 on 05-FEB-2026 by the program
+  !    <TABLO  Version 7.0   August 2018>
+  !  which accesses some of the routines in the GEMPACK software release
+  !    <GEMPACK Release 12.0.003   February 2019>
+  !  [The program which created this file was compiled with GF64.]
+ 
+ Auxiliary Table File was created by TABLO at 09:02:23 on 05-FEB-2026
+ [TABLO file used here is "SJ.tab".]
+ [No TABLO STI file used when TABLO was run.]
+ 
+  (Writing output to log file, and also to the terminal.)
+ (Opened new text file 'sjlb.log'.)
+ 
+  Using Gempack optimized version of LU decompositions
+  With this option active several old options are obsolete.
+  These options concern: Markowitz pivots, and those starting with pivots, MA48 and MA28.
+ 
+  Search depth for LU is set to 256
+  Column Filter threshold is set to 5.0000001E-02
+  Harwell paramter for reuse is set to -1.000000
+ 
+ [This TG-program was created by TABLO at 09:02:23 on 05-FEB-2026.]
+ When TABLO was run, GPDIR="C:\GP"
+ 
+  [Starting to check "extra" statements on the Command file.]
+  
+ 
+  [Finished checking "extra" statements on the Command file.]
+  
+ 
+ ++++++++++++++++++++++++++++++++++++++++++++++++++
+  This program was written by the GEMPACK program TABLO 
+  as described in the Information file
+  'SJ.inf
+ 
+  This run of the TABLO-generated program
+      o can create the Equations file
+      o can carry out multi-step simulations
+ 
+ ++++++++++++++++++++++++++++++++++++++++++++++++++
+ (Range test of updated or extrapolated values will produce warnings.)
+ 
+  (Method is euler.)
+  (Extrapolating from 1, 2 and 4-step solutions.)
+ (Range test of initial values will produce warnings.)
+  (Model is ''.   Version number is 1.)
+ (Opened new header file 'sjlb.sl4'.)
+ (Solution file is 'sjlb.sl4'.)
+ (Opened new header file 'sjlb.slc'.)
+ (Opened, as text, existing file 'sjlb.cmf'.)
+ 
+  !  (There is no CREATION information on this file.)
+  
+ (Opened new text file 'sjlb.xac'.)
+ Licence file: C:\GP\licen.gem
+  
+ (Extrapolation Accuracy file is 'sjlb.xac'.)
+ 
+  (Data file with logical name 'iodata')
+ (Opened, as header, existing file '..\model\sj.har'.)
+ 
+  !  This file was created at 11:34:44 on 20-MAR-96 by the program
+  !    <GEMSIM  Version 1.3  February 1996>
+  !  which accesses some of the routines in the GEMPACK software release
+  !    <GEMPACK  Release 5.1.6+   March 1996>
+ 
+ 
+  UPDATED VERSION OF DATA FILE WITH LOGICAL NAME 'iodata
+  -------------------------------------------------------
+ (Opened new header file 'sjlb.upd'.)
+ 
+  --->  Beginning the preliminary pass (aimed at sets and subsets).
+ Set 'SECT'
+   [Set has size 2.]
+ Set 'FAC'
+   [Set has size 2.]
+ Set 'NUM_SECT'
+   [Set has size 1.]
+ 'NUM_SECT' as a subset of 'SECT'
+ [CPU for reads, formulas etc is 0.00 seconds.]
+ Elapsed time for reads, formulas etc is: less than one second.
+ 
+  ------- MODEL REPORT ------
+  The un-condensed model contains:
+      11 variables comprising 29 components
+  and 10 equation blocks comprising 27 separate equations.
+ 
+      0 variables (comprising 0 components) will be backsolved for.
+      0 variables (comprising 0 components) were substituted out.
+      0 variables (comprising 0 components) were omitted.
+ 
+  So the condensed model contains:
+      11 variables comprising 29 components
+  and 10 equation blocks comprising 27 separate equations.
+  ------- END OF MODEL REPORT ------
+  
+   (1 character strings, each of length 1 read. Header "SVFM")
+ 
+  Total memory currently used for all arrays is approximately 0.02 megabytes.
+  [This does NOT include memory related to MMNZ, MMNZ1 and MMNZ2. The
+   associated arrays are not allocated.]
+  [Add about 5-10 megabytes for the memory used by the code.]
+  [Total memory currently allocated for Coefficients and Updated
+   Coefficients is about        0.0 and        0.0 MB respectively.]
+ 
+  --->  Beginning pass number 1 of 1-pass calculation.
+ 
+  CHOICE OF ECONOMIC ENVIRONMENT
+  (All components of 'p_XFAC' chosen to be exogenous.)
+ (Finished specifying closure.)
+ 
+  [ Current closure is valid, namely,
+    there are 2 exogenous and 27 endogenous.]
+ 
+ 
+ (Completed specifying a closure.)
+ 
+  (Value of Harwell parameter U to be used is  0.1000000.)
+ 
+  SHOCKS
+  ------
+  
+  (The following components of 'p_XFAC' have been chosen to be shocked :
+  1
+  Component 1,  value 10.00000
+ 
+ (Total number of nonzero shocks is 1.)
+ (Opened, as header, existing file '..\model\sj.har'.)
+ Reading DVCOMIN(SECT,SECT)
+ (Read real array, size 2x2, header "CINP".)
+ Reading DVFACIN(FAC,SECT)
+ (Read real array, size 2x2, header "FINP".)
+ Reading DVHOUS(SECT)
+ (Read real array, size 2, header "HCON".)
+  Formula for 'PC'
+  Formula for 'PF'
+  Formula for 'ALPHACOM'
+  Formula for 'ALPHAFAC'
+  Formula for 'Y'
+  Formula for 'XC'
+  Formula for 'XF'
+  Formula for 'XH'
+  Formula for 'XCOM'
+  Formula for 'XFAC'
+  (Checking that values of 'Y' are in the required range.)
+  (Checking that values of 'PC' are in the required range.)
+  (Checking that values of 'PF' are in the required range.)
+  (Checking that values of 'XCOM' are in the required range.)
+  (Checking that values of 'XFAC' are in the required range.)
+  (Checking that values of 'XH' are in the required range.)
+  (Checking that values of 'XC' are in the required range.)
+  (Checking that values of 'XF' are in the required range.)
+  (Checking that values of 'DVCOMIN' are in the required range.)
+  (Checking that values of 'DVFACIN' are in the required range.)
+  (Checking that values of 'DVHOUS' are in the required range.)
+ [CPU for reads, formulas etc is 0.00 seconds.]
+ Elapsed time for reads, formulas etc is: less than one second.
+ 
+  (Writing the Solution Coefficients (SLC) file.)
+ 
+  Total memory currently used for all arrays is approximately 0.59 megabytes.
+  [This includes memory relating to current values:    MMNZ=50000, MMNZ1=50000 and MMNZ2=50000.]
+  [Add about 5-10 megabytes for the memory used by the code.]
+  [Total memory currently allocated for Coefficients and Updated
+   Coefficients is about        0.0 and        0.0 MB respectively.]
+ 
+  [Starting TGCSM2W submatrices]
+ 
+  Equation 'Comin'
+     Submatrix for variable 'p_PC'
+     (Number of nonzeros is 4, all on the LHS.)
+     Submatrix for variable 'p_XC'
+     (Number of nonzeros is 4, all on the LHS.)
+     Submatrix for variable 'p_DVCOMIN'
+     (Number of nonzeros is 4, all on the LHS.)
+ 
+  Equation 'Facin'
+     Submatrix for variable 'p_PF'
+     (Number of nonzeros is 4, all on the LHS.)
+     Submatrix for variable 'p_XF'
+     (Number of nonzeros is 4, all on the LHS.)
+     Submatrix for variable 'p_DVFACIN'
+     (Number of nonzeros is 4, all on the LHS.)
+ 
+  Equation 'House'
+     Submatrix for variable 'p_PC'
+     (Number of nonzeros is 2, all on the LHS.)
+     Submatrix for variable 'p_XH'
+     (Number of nonzeros is 2, all on the LHS.)
+     Submatrix for variable 'p_DVHOUS'
+     (Number of nonzeros is 2, all on the LHS.)
+ 
+  Equation 'Com_clear'
+     Submatrix for variable 'p_XCOM'
+     (Number of nonzeros is 2, all on the LHS.)
+     Submatrix for variable 'p_XH'
+     (Number of nonzeros is 2, all on the LHS.)
+     Submatrix for variable 'p_XC'
+     (Number of nonzeros is 4, all on the LHS.)
+ 
+  Equation 'Factor_use'
+     Submatrix for variable 'p_XFAC'
+     (Number of nonzeros is 1, all corresponding to shocks.)
+     Submatrix for variable 'p_XF'
+     (Number of nonzeros is 4, all on the LHS.)
+ 
+  Equation 'Consumer_demands'
+     Submatrix for variable 'p_Y'
+     (Number of nonzeros is 2, all on the LHS.)
+     Submatrix for variable 'p_PC'
+     (Number of nonzeros is 2, all on the LHS.)
+     Submatrix for variable 'p_XH'
+     (Number of nonzeros is 2, all on the LHS.)
+ 
+  Equation 'Intermediate_com'
+     Submatrix for variable 'p_PC'
+     (Number of nonzeros is 4, all on the LHS.)
+     Submatrix for variable 'p_XCOM'
+     (Number of nonzeros is 4, all on the LHS.)
+     Submatrix for variable 'p_XC'
+     (Number of nonzeros is 4, all on the LHS.)
+ 
+  Equation 'Factor_inputs'
+     Submatrix for variable 'p_PC'
+     (Number of nonzeros is 4, all on the LHS.)
+     Submatrix for variable 'p_PF'
+     (Number of nonzeros is 4, all on the LHS.)
+     Submatrix for variable 'p_XCOM'
+     (Number of nonzeros is 4, all on the LHS.)
+     Submatrix for variable 'p_XF'
+     (Number of nonzeros is 4, all on the LHS.)
+ 
+  Equation 'Price_formation'
+     Submatrix for variable 'p_PC'
+     (Number of nonzeros is 4, all on the LHS.)
+     Submatrix for variable 'p_PF'
+     (Number of nonzeros is 4, all on the LHS.)
+ 
+  Equation 'Numeraire'
+     Submatrix for variable 'p_PC'
+     (Number of nonzeros is 1, all on the LHS.)
+ [CPU for equations is 0.00 seconds.]
+ Elapsed time for equations is: less than one second.
+ [CPU for formulas and equations is 0.00 seconds.]
+ Elapsed time for formulas and equations is: less than one second.
+ 
+  CUMULATIVELY-RETAINED ENDOGENOUS
+  --------------------------------
+  
+ 
+   Total number (of components) chosen to
+    be cumulatively-retained endogenous is 27.
+  
+ 
+  VERBAL DESCRIPTION IS AS FOLLOWS:
+  
+ Stylized Johansen model. Standard data and closure.
+ 10 per cent increase in amount of labor.
+   (Capital remains unchanged.)
+ [Solution method is euler. Steps = 1,2,4.]
+ [CMF file: sjlb.cmf]
+ 
+   Total number (of components) chosen to
+    be XAC-retained is 27.
+  
+ (Opened new binary file 'sjlb.cdk'.)
+ 
+  (Beginning a simulation.)
+ 
+   (Total number of endogenous variables is 27.)
+   (Total number of nonzero entries 
+    in the left hand side matrix is 85.)
+  [KSTEPA=1, NPASSA=1]
+ 
+  (Calculating the LU decomposition.)
+   [CPU time for GPLU analysis is 0.00 seconds.]
+   Elapsed time for  GPLU analysis is: less than one second.
+  [Calling MA48BG.]
+   [CPU time for MA48B is 0.00 seconds.]
+   Elapsed time for MA48B is: less than one second.
+  (Minimum size of MMNZ and MMNZ1 to allow LU decomposition by MA48 is 170.)
+  [CPU time for LU decomposition is 0.00 seconds.]
+  Elapsed time for LU decomposition is: less than one second.
+  [CPU time for MA48C/MA28I is 0.00 seconds.]
+  [CPU time for solution accuracy check is 0.00 seconds.]
+  (Cumulative solution obtained.)
+  [CPU time for MA48C/MA28I is 0.00 seconds.]
+  [CPU time for solution accuracy check is 0.00 seconds.]
+  (Second cumulative solution obtained.)
+  [CPU time for MA48C/MA28I is 0.00 seconds.]
+  [CPU time for solution accuracy check is 0.00 seconds.]
+  (Third cumulative solution obtained.)
+ [CPU for simulation is 0.00 seconds.]
+ Elapsed time for simulation is: less than one second.
+ Elapsed time to do up to first solve (this subinterval) is
+   less than one second.
+ 
+  (Beginning the backsolve after pass 1 of this 1-pass calculation.)
+  [CPU for backsolve is 0.00 seconds.]
+  Elapsed time for backsolve is: less than one second.
+ 
+  (Beginning the update after pass 1 of this 1-pass calculation.)
+ Update of "Y"
+ Update of "PC"
+ Update of "PF"
+ Update of "XCOM"
+ Update of "XFAC"
+ Update of "XH"
+ Update of "XC"
+ Update of "XF"
+ Update of "DVCOMIN"
+ Update of "DVFACIN"
+ Update of "DVHOUS"
+ (Opened new header file 'sjlb-1-1.uc5'.)
+ 
+  (Writing the UC5/6/7 file.)
+  [CPU for update is 0.00 seconds.]
+  [CPU for step 1 is 0.00 seconds.]
+  Elapsed time for update is: less than one second.
+  Elapsed time for step 1 is: less than one second.
+ Elapsed time to do after-first-LU-decomp part
+  of this 1-pass calculation is: less than one second.
+ [CPU for all of this 1-step calculation is 0.00 seconds.]
+ Elapsed time for all this 1-step calculation is: less than one second.
+ 
+  --->  Beginning pass number 1 of 2-pass calculation.
+ [CPU for simulation is 0.00 seconds.]
+ Elapsed time for simulation is: less than one second.
+ 
+  (Beginning the backsolve after pass 1 of this 2-pass calculation.)
+ 
+  (Reading pre-sim values from the current SLC file.)
+  [CPU for backsolve is 0.06 seconds.]
+  Elapsed time for backsolve is: less than one second.
+ 
+  (Beginning the update after pass 1 of this 2-pass calculation.)
+  [CPU for update is 0.00 seconds.]
+  [CPU for step 1 is 0.06 seconds.]
+  Elapsed time for update is: less than one second.
+  Elapsed time for step 1 is: less than one second.
+ 
+  --->  Beginning pass number 2 of 2-pass calculation.
+  [Copying all updated values for use in this pass.]
+ [CPU for reads, formulas etc is 0.00 seconds.]
+ Elapsed time for reads, formulas etc is: less than one second.
+ 
+  [Starting TGCSM2W submatrices]
+ [CPU for equations is 0.00 seconds.]
+ Elapsed time for equations is: less than one second.
+ [CPU for formulas and equations is 0.00 seconds.]
+ Elapsed time for formulas and equations is: less than one second.
+  (There are now 85 nonzeros in those parts of
+      the equations calculated for this step.)
+  
+ 
+  (Beginning simulation for pass number 2 of a 2-pass simulation.)
+   (Total number of nonzero entries 
+    in the left hand side matrix is 85.)
+  [KSTEPA=2, NPASSA=2]
+ 
+  (Calculating the LU decomposition.)
+  Reusing permutations for zero free diagonal
+  Reusing strong connect permutations
+  ReUse of pivots successful
+   [CPU time for GPLU analysis is 0.00 seconds.]
+   Elapsed time for  GPLU analysis is: less than one second.
+  [Calling MA48BG.]
+   [CPU time for MA48B is 0.00 seconds.]
+   Elapsed time for MA48B is: less than one second.
+  (Minimum size of MMNZ and MMNZ1 to allow LU decomposition by MA48 is 170.)
+  [CPU time for LU decomposition is 0.00 seconds.]
+  Elapsed time for LU decomposition is: less than one second.
+  [CPU time for MA48C/MA28I is 0.00 seconds.]
+  [CPU time for solution accuracy check is 0.00 seconds.]
+  (Cumulative solution obtained.)
+ [CPU for simulation is 0.00 seconds.]
+ Elapsed time for simulation is: less than one second.
+ 
+  (Beginning the backsolve after pass 2 of this 2-pass calculation.)
+  [CPU for backsolve is 0.00 seconds.]
+  Elapsed time for backsolve is: less than one second.
+ 
+  (Beginning the update after pass 2 of this 2-pass calculation.)
+ 
+  (Writing the UC5/6/7 file.)
+  [CPU for update is 0.02 seconds.]
+  [CPU for step 2 is 0.02 seconds.]
+  Elapsed time for update is:  1 seconds.
+  Elapsed time for step 2 is:  1 seconds.
+ Elapsed time to do after-first-LU-decomp part
+  of this 2-pass calculation is:  1 seconds.
+ [CPU for all of this 2-step calculation is 0.08 seconds.]
+ Elapsed time for all this 2-step calculation is:  1 seconds.
+ 
+  --->  Beginning pass number 1 of 4-pass calculation.
+ [CPU for simulation is 0.00 seconds.]
+ Elapsed time for simulation is: less than one second.
+ 
+  (Beginning the backsolve after pass 1 of this 4-pass calculation.)
+ 
+  (Reading pre-sim values from the current SLC file.)
+  [CPU for backsolve is 0.00 seconds.]
+  Elapsed time for backsolve is: less than one second.
+ 
+  (Beginning the update after pass 1 of this 4-pass calculation.)
+  [CPU for update is 0.00 seconds.]
+  [CPU for step 1 is 0.00 seconds.]
+  Elapsed time for update is: less than one second.
+  Elapsed time for step 1 is: less than one second.
+ 
+  --->  Beginning pass number 2 of 4-pass calculation.
+  [Copying all updated values for use in this pass.]
+ [CPU for reads, formulas etc is 0.00 seconds.]
+ Elapsed time for reads, formulas etc is: less than one second.
+ 
+  [Starting TGCSM2W submatrices]
+ [CPU for equations is 0.00 seconds.]
+ Elapsed time for equations is: less than one second.
+ [CPU for formulas and equations is 0.00 seconds.]
+ Elapsed time for formulas and equations is: less than one second.
+  (There are now 85 nonzeros in those parts of
+      the equations calculated for this step.)
+  
+ 
+  (Beginning simulation for pass number 2 of a 4-pass simulation.)
+   (Total number of nonzero entries 
+    in the left hand side matrix is 85.)
+  [KSTEPA=2, NPASSA=4]
+ 
+  (Calculating the LU decomposition.)
+  Reusing permutations for zero free diagonal
+  Reusing strong connect permutations
+  ReUse of pivots successful
+   [CPU time for GPLU analysis is 0.00 seconds.]
+   Elapsed time for  GPLU analysis is: less than one second.
+  [Calling MA48BG.]
+   [CPU time for MA48B is 0.00 seconds.]
+   Elapsed time for MA48B is: less than one second.
+  (Minimum size of MMNZ and MMNZ1 to allow LU decomposition by MA48 is 170.)
+  [CPU time for LU decomposition is 0.00 seconds.]
+  Elapsed time for LU decomposition is: less than one second.
+  [CPU time for MA48C/MA28I is 0.00 seconds.]
+  [CPU time for solution accuracy check is 0.00 seconds.]
+  (Cumulative solution obtained.)
+ [CPU for simulation is 0.00 seconds.]
+ Elapsed time for simulation is: less than one second.
+ 
+  (Beginning the backsolve after pass 2 of this 4-pass calculation.)
+  [CPU for backsolve is 0.00 seconds.]
+  Elapsed time for backsolve is: less than one second.
+ 
+  (Beginning the update after pass 2 of this 4-pass calculation.)
+  [CPU for update is 0.00 seconds.]
+  [CPU for step 2 is 0.00 seconds.]
+  Elapsed time for update is: less than one second.
+  Elapsed time for step 2 is: less than one second.
+ 
+  --->  Beginning pass number 3 of 4-pass calculation.
+  [Copying all updated values for use in this pass.]
+ [CPU for reads, formulas etc is 0.00 seconds.]
+ Elapsed time for reads, formulas etc is: less than one second.
+ 
+  [Starting TGCSM2W submatrices]
+ [CPU for equations is 0.00 seconds.]
+ Elapsed time for equations is: less than one second.
+ [CPU for formulas and equations is 0.00 seconds.]
+ Elapsed time for formulas and equations is: less than one second.
+  (There are now 85 nonzeros in those parts of
+      the equations calculated for this step.)
+  
+ 
+  (Beginning simulation for pass number 3 of a 4-pass simulation.)
+   (Total number of nonzero entries 
+    in the left hand side matrix is 85.)
+  [KSTEPA=3, NPASSA=4]
+ 
+  (Calculating the LU decomposition.)
+  Reusing permutations for zero free diagonal
+  Reusing strong connect permutations
+  ReUse of pivots successful
+   [CPU time for GPLU analysis is 0.00 seconds.]
+   Elapsed time for  GPLU analysis is: less than one second.
+  [Calling MA48BG.]
+   [CPU time for MA48B is 0.00 seconds.]
+   Elapsed time for MA48B is: less than one second.
+  (Minimum size of MMNZ and MMNZ1 to allow LU decomposition by MA48 is 170.)
+  [CPU time for LU decomposition is 0.00 seconds.]
+  Elapsed time for LU decomposition is: less than one second.
+  [CPU time for MA48C/MA28I is 0.00 seconds.]
+  [CPU time for solution accuracy check is 0.00 seconds.]
+  (Cumulative solution obtained.)
+ [CPU for simulation is 0.00 seconds.]
+ Elapsed time for simulation is: less than one second.
+ 
+  (Beginning the backsolve after pass 3 of this 4-pass calculation.)
+  [CPU for backsolve is 0.00 seconds.]
+  Elapsed time for backsolve is: less than one second.
+ 
+  (Beginning the update after pass 3 of this 4-pass calculation.)
+  [CPU for update is 0.00 seconds.]
+  [CPU for step 3 is 0.00 seconds.]
+  Elapsed time for update is: less than one second.
+  Elapsed time for step 3 is: less than one second.
+ 
+  --->  Beginning pass number 4 of 4-pass calculation.
+  [Copying all updated values for use in this pass.]
+ [CPU for reads, formulas etc is 0.00 seconds.]
+ Elapsed time for reads, formulas etc is: less than one second.
+ 
+  [Starting TGCSM2W submatrices]
+ [CPU for equations is 0.00 seconds.]
+ Elapsed time for equations is: less than one second.
+ [CPU for formulas and equations is 0.00 seconds.]
+ Elapsed time for formulas and equations is: less than one second.
+  (There are now 85 nonzeros in those parts of
+      the equations calculated for this step.)
+  
+ 
+  (Beginning simulation for pass number 4 of a 4-pass simulation.)
+   (Total number of nonzero entries 
+    in the left hand side matrix is 85.)
+  [KSTEPA=4, NPASSA=4]
+ 
+  (Calculating the LU decomposition.)
+  Reusing permutations for zero free diagonal
+  Reusing strong connect permutations
+  ReUse of pivots successful
+   [CPU time for GPLU analysis is 0.00 seconds.]
+   Elapsed time for  GPLU analysis is: less than one second.
+  [Calling MA48BG.]
+   [CPU time for MA48B is 0.00 seconds.]
+   Elapsed time for MA48B is: less than one second.
+  (Minimum size of MMNZ and MMNZ1 to allow LU decomposition by MA48 is 170.)
+  [CPU time for LU decomposition is 0.00 seconds.]
+  Elapsed time for LU decomposition is: less than one second.
+  [CPU time for MA48C/MA28I is 0.00 seconds.]
+  [CPU time for solution accuracy check is 0.00 seconds.]
+  (Cumulative solution obtained.)
+ [CPU for simulation is 0.00 seconds.]
+ Elapsed time for simulation is: less than one second.
+ 
+  (Beginning the backsolve after pass 4 of this 4-pass calculation.)
+  [CPU for backsolve is 0.00 seconds.]
+  Elapsed time for backsolve is: less than one second.
+ 
+  (Beginning the update after pass 4 of this 4-pass calculation.)
+ 
+  (Writing the UC5/6/7 file.)
+  [CPU for update is 0.00 seconds.]
+  [CPU for step 4 is 0.00 seconds.]
+  Elapsed time for update is: less than one second.
+  Elapsed time for step 4 is: less than one second.
+ Elapsed time to do after-first-LU-decomp part
+  of this 4-pass calculation is: less than one second.
+ [CPU for all of this 4-step calculation is 0.00 seconds.]
+ Elapsed time for all this 4-step calculation is: less than one second.
+ 
+  ---> Beginning the extrapolation.
+ 
+  (Extrapolating - Cumulative results.)
+ 
+ 
+        SUMMARY OF CONVERGENCE RESULTS                  Number   Min Figs Agree
+        ------------------------------                  ------   --------------
+   XMA  Three extrapolations equal to machine accuracy       3         6
+   FC0  Fair confidence that the result is zero              2
+   CX   Confidence in the extrapolated result               22         2
+ 
+   2 results are judged accurate to 2 figures.
+   4 results are judged accurate to 3 figures.
+   16 results are judged accurate to 4 figures.
+   3 results are judged accurate to 6 figures.
+ 
+  Above is for linearised variables.
+  Below are for levels values of percent-change and change results.
+  
+   1 results are judged accurate to 4 figures.
+   21 results are judged accurate to 5 figures.
+   5 results are judged accurate to 6 figures.
+ 
+  (The summary above covers the XAC-retained variables.)
+  
+ 
+  Total memory currently used for all arrays is approximately 0.59 megabytes.
+  [This includes memory relating to current values:    MMNZ=50000, MMNZ1=50000 and MMNZ2=50000.]
+  [Add about 5-10 megabytes for the memory used by the code.]
+  [Total memory currently allocated for Coefficients and Updated
+   Coefficients is about        0.0 and        0.0 MB respectively.]
+  [This is probably the most memory that will be used in this run.]
+  
+ [Deallocated MMNZ memory before TGCMST call (TGGSBS1).]
+ 
+  (Final cumulative solution written to Solution file.)
+ [CPU for extrapolation is 0.00 seconds.]
+ Elapsed time for extrapolation is: less than one second.
+ 
+  NEXT SUMMARY IS FOR ALL UPDATED DATA
+  
+ 
+        SUMMARY OF CONVERGENCE RESULTS                  Number   Min Figs Agree
+        ------------------------------                  ------   --------------
+   XMA  Three extrapolations equal to machine accuracy      11         6
+   CX   Confidence in the extrapolated result               18         3
+ 
+   1 results are judged accurate to 3 figures.
+   1 results are judged accurate to 4 figures.
+   16 results are judged accurate to 5 figures.
+   11 results are judged accurate to 6 figures.
+ 
+ 
+  Variable accuracy "face" number is 7 (out of 10).
+  Data accuracy "face" number is 7 (out of 10).
+  
+  [Total CPU is 0.16 seconds.]
+ 
+  (Minimum values for successful completion seem to be:
+    MMNZ=170, MMNZ1=170, MMNZ2=170.)
+ 
+  Total memory currently used for all arrays is approximately 0.02 megabytes.
+  [This does NOT include memory related to MMNZ, MMNZ1 and MMNZ2. The
+   associated arrays are not allocated.]
+  [Add about 5-10 megabytes for the memory used by the code.]
+  [Total memory currently allocated for Coefficients and Updated
+   Coefficients is about        0.0 and        0.0 MB respectively.]
+  [The likely maximum memory used in this run has 
+    been reported earlier - search for "most memory".]
+  
+ 
+  Maximum residual ratio across whole simulation is 2.7410380E-08
+  
+ (Solution file is 'sjlb.sl4'.)
+ (Extrapolation accuracy file is 'sjlb.xac'.)
+ (SLC file is 'sjlb.slc'.)
+ 
+  (Inputs have been taken from the Command file "G:\My Drive\My Training\ADB Courses\Computable General Equilibrium\cge\sj\shock\sjlb.cmf")
+ 
+  (The program has completed without error.)
+  (The program has completed without warnings.)
+  
+  Total elapsed time is:  3 seconds.
+
+ This run ended at 09:14:05 on 05-FEB-2026

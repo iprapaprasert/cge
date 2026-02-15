@@ -1,0 +1,21 @@
+auxiliary files=minimal;
+File BaseData = minimal.har;
+File Summary = minsum.har;
+updated file BaseData = agg3.upd;
+method =gragg;
+steps = 2 4 6;
+
+Verbal Description= ddddddd;
+Exogenous         phi ; ! 1
+Exogenous       employ ; ! 1
+Exogenous       gret ; ! IND
+Exogenous       x3tot ; ! 1
+Exogenous       x_s(COM,"Investment") ; ! 1
+Exogenous       x_s(COM,"Government") ; ! 1
+Exogenous      a1prim ; ! IND
+Exogenous      pworld ; ! COM
+Exogenous f4q;
+Exogenous  Delmtxrate ; ! COM
+Exogenous  Delptxrate ; ! COM
+rest endogenous;
+shock x3tot=1;
