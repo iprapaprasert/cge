@@ -1,0 +1,34 @@
+! Want 5% increase in aggregate employment by fixing trade balance !
+! and let aggregate household consumption and real wage changes !
+! Use Johansen !
+
+! Input Data
+File BASEDATA = ..\model\minimal.har; ! Data File
+
+! Output
+File SUMMARY = <cmf>sum.har;
+File SUMMARYPS = <cmf>sumps.har;
+Updated File BASEDATA = <cmf>.upd; ! Follow convension 22.2.1
+
+Method = johansen;
+
+! SHORTRUN closure
+exogenous phi x_s(COM,"Investment") x_s(COM,"Government") x1cap realwage x3tot
+    a1prim pworld f4q Delmtxrate Delptxrate;
+rest endogenous;
+
+swap employ = x3tot;
+swap delB = realwage;
+
+shock employ = 5;
+
+! Verbal Description
+verbal description = MINIMAL model. Default IOTABLE and SHORTRUN closure.
+Use Johansen method.
+Want 5% increase in aggregate employment by exoginixing trade balance
+and endogenizing household consumption and real wage;
+
+! Options
+Extrapolation Accuracy File = no;
+
+! End of Command file

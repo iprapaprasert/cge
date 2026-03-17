@@ -1,0 +1,26 @@
+! -3.6568% decrease in real wage
+! Use Johansen !
+
+! Input Data
+File BASEDATA = ..\model\minimal.har; ! Data File
+
+! Output
+File SUMMARY = <cmf>sum.har;
+File SUMMARYPS = <cmf>sumps.har;
+Updated File BASEDATA = <cmf>.upd; ! Follow convension 22.2.1
+
+Method = johansen;
+
+Verbal Description = Exercises with the MINIMAL Model;
+
+! SHORTRUN closure
+Exogenous phi realwage x1cap x3tot x_s(COM,"Investment") x_s(COM,"Government") 
+    a1prim pworld f4q Delmtxrate Delptxrate;
+Rest Endogenous;
+
+Shock realwage = -3.6568;
+
+! Options
+Extrapolation Accuracy File = no;
+
+! End of Command file
