@@ -18,7 +18,7 @@ subroutine les(string %exp, string %goods, string %labels, string %pweight, stri
 	'' %smpl = ""
 	'' !frisch = -2
 
-	'============================================================'
+	'============================================================================='
 
 	' Assertion
 	if @wcount(%labels) <> @wcount(%goods) then
