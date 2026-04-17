@@ -10,10 +10,10 @@ def xtile(df: "DataFrame", newvar: str, x: "ColumnOrName", nquantiles: int = 2, 
         New variable name
     x : `pyspark.sql.Column` or column name
         Numeric column to categorize.
-    weight : `pyspark.sql.Column` or column name
-        The weight to be attached to each observation.
     nquantiles : int
         Number of quantiles; default is `nquantiles(2)`
+    weight : `pyspark.sql.Column` or column name
+        The weight to be attached to each observation.
 
     Returns
     -------
