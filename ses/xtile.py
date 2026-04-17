@@ -1,4 +1,10 @@
-def xtile(df: "DataFrame", newvar: str, x: "ColumnOrName", nquantiles: int = 2, weight: "ColumnOrName" = lit(1)) -> Column:
+def xtile(
+    df: DataFrame, 
+    newvar: str, 
+    x: "ColumnOrName", 
+    nquantiles: int=2, 
+    weight: "ColumnOrName"=lit(1)
+) -> DataFrame:
     """
     Create variable containing quantile categories.
 
@@ -20,10 +26,7 @@ def xtile(df: "DataFrame", newvar: str, x: "ColumnOrName", nquantiles: int = 2, 
     `Column`
         a new variable containing the percentiles of `col`
     """
-    if weight is None:
-        tempdf = df.select(x, lit(1).alias("weight"))
-    else:
-        tempdf = df.select(x, weight)
+    tempdf = df.select(x, weight)
     
     N = tempdf.select(sum(weight)).collect()[0][0]
     tempdf = tempdf \
