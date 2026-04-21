@@ -1,25 +1,44 @@
-subroutine les(string %exp, string %goods, string %labels, string %pweight, string %smpl, scalar !frisch)
+subroutine les(string %goods, string %smpl, string %pweight, scalar !frisch, string %exp, string %demog, string %labels)
 	' Estimates the LES with no price variability
+	
 	' Parameters:
-	'' exp : total expenditure
 	'' goods : expenditure shares of the goods, must be positive, sum to one
-	'' labels : labels for goods
-	'' pweight : probability weight
 	'' smpl : sample
+	'' pweight : probability weight
 	'' frisch : calibrated Frisch parameter
-	''' To calibrated Frisch parameter, verify that
-	''' 1) subsistence demand are all positive
-	''' 2) main diagonal elements of the Slutsky matrix are negative, whereas its off-diagonal elements are positive
+	'' exp : total expenditure
+	'' demog : two series identify number of kids (age < 14) and number of adults (age >= 14), respectively
+	'' labels : labels for goods
+	
+	' To calibrated Frisch parameter, verify that
+	'' 1) sum of alpha = 0
+	'' 2) beta > 0, sum of beta = 1
+	'' 3) subsistence demand are all positive
+	'' 4) subsistence demand to income less than one and positive
+	'' 5) income elasticities > 0
+	'' 6) -1 < Marshallian own-price elasticities < 0
+	'' 7) Marshallian cross-price elasticities < 0
+	'' 8) Slutsky own-price elasticities > Marshallian own-price elasticities
+	'' 9) main diagonal elements of the Slutsky matrix are negative, whereas its off-diagonal elements are positive
+	'' the intuition of Frisch parameter is -income / supernumerary expenditure
+	
 	' Examples:
 	'' %exp = "expfd"
 	'' %goods = "w_dairy w_proteins w_fruitveg w_flours w_misc"
+	'' %demog = "n_kids n_adults"
 	'' %labels = "dairy proteins fruitveg flours misc"
 	'' %pweight = ""
 	'' %smpl = ""
 	'' !frisch = -2
 
-	'============================================================================='
+	'============================================================'
 
+	if @isempty(%smpl) then
+		smpl @all
+	else
+		smpl {%smpl}
+	endif
+	
 	' Assertion
 	if @wcount(%labels) <> @wcount(%goods) then
     	@uiprompt("Error: Number of goods do not match with number of labels", "O", "CB")
@@ -31,7 +50,7 @@ subroutine les(string %exp, string %goods, string %labels, string %pweight, stri
 	for %good {%goods} 
 		%sum = %sum + " + " + %good 
 	next
-	if @mean({%sum}) - 1 > 1e-06 then
+	if @abs(@mean({%sum}) - 1) > 1e-06 then
 		@uiprompt("Error: Sum of expenditure shares does not equal to one ", "O", "CB")
 		return
 	endif
@@ -48,6 +67,15 @@ subroutine les(string %exp, string %goods, string %labels, string %pweight, stri
 		summary(1,!h) = %head
 		!h = !h + 1
 	next
+
+	' Create equivalisation for demographic translating
+	if @wcount(%demog) = 2 then
+		%nkids = @word(%demog, 1)
+		%nadults = @word(%demog, 2)
+		series demog = @recode({%nadults} <> 0, 1 + 0.5*({%nadults} - 1) + 0.3*{%nkids}, 1 + 0.3*({%nkids} - 1))
+	else ' no demographic variables
+		series demog = 1
+	endif
 	
 	' Linear expenditure system without price variability
 	coef(@wcount(%goods)) alpha
@@ -74,11 +102,10 @@ subroutine les(string %exp, string %goods, string %labels, string %pweight, stri
 			summary(!i+1, 1) =  %cur_good
 		endif
 		''' expenditure value on goods i
-		series v_{%cur_good} = {%cur_good}*{%exp}
 		if @isempty(%pweight) then
-			equation ls_{%cur_good}.ls v_{%cur_good} = alpha(!i) + beta(!i)*{%exp}
+			equation ls_{%cur_good}.ls {%cur_good}*({%exp}/demog) = alpha(!i) + beta(!i)*({%exp}/demog)
 		else ' have a probability weight
-			equation ls_{%cur_good}.ls(w={%pweight}, wtype=ivar, wscale=avg, cov=white) v_{%cur_good} = alpha(!i) + beta(!i)*{%exp}
+			equation ls_{%cur_good}.ls(w={%pweight}, wtype=ivar, wscale=avg, cov=white) {%cur_good}*({%exp}/demog) = alpha(!i) + beta(!i)*({%exp}/demog)
 		endif
 	next
 	
@@ -138,3 +165,5 @@ subroutine les(string %exp, string %goods, string %labels, string %pweight, stri
 endsub
 
 ' end of program
+
+
