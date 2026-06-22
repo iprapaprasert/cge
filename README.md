@@ -14,5 +14,5 @@ Open model `.tab` file in model directory. Do the `CHECK` and `TABCODE` to compl
 
 In `shock` folder, open `cmf` file, define the shock. Then, with using TABmate go to File > CMD prompt in current folder. In CMD run this command:
 ```
-..\model\[NAME OF TAB FILE WITHOUT EXTENSION] -cmf [์NAME OF CMF FILE WITH EXTENSION]
+..\..\model\[NAME OF TAB FILE WITHOUT EXTENSION] -cmf [์NAME OF CMF FILE WITH EXTENSION]
 ```
