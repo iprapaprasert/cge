@@ -10,7 +10,8 @@ CGE_MODEL <- root folder, should be name of CGE model such as MINIMAL, ORANIG, O
 ```
 
 # Run the CGE model in CMD
-Open model `.tab` file in model directory. Do the `TABSTI` to comply the model
+Open model `.tab` file in model directory. Do the `CHECK` and `TABCODE` to comply the model.
+
 In `shock` folder, open `cmf` file, define the shock. Then, with using TABmate go to File > CMD prompt in current folder. In CMD run this command:
 ```
 ..\model\[NAME OF TAB FILE WITHOUT EXTENSION] -cmf [์NAME OF CMF FILE WITH EXTENSION]
