@@ -1,0 +1,77 @@
+
+ This GEMPACK log file was created at 11:46:24 on 22-JUN-2026 by the program
+  <oranig.for 22-JUN-2026 (a TABLO-generated program)>
+ which accesses some of the routines in the GEMPACK software release
+  <GEMPACK Release 12.0.003   February 2019>
+ 
+ 
+ <oranig.for 22-JUN-2026 (a TABLO-generated program)>
+   This program accesses some of the routines in the GEMPACK software release
+ <GEMPACK Release 12.0.003   February 2019>
+  
+ Licence file: C:\GP\licen.gem
+  
+     -------------------------------------------------------
+    !            GEMPACK Software System Licence            !
+    !  Source Code Licence for the GEMPACK Software System  !
+    !                 Licence No.  GFM-1643                 !
+    !          Licence for Release 12.0 of GEMPACK          !
+    !              The Thailand Research Fund               !
+    !                Phyathai, Bangkok 10400                !
+     -------------------------------------------------------
+ 
+ 
+     << COPYRIGHT 1987-2018: CoPS/Impact and KPSOFT >>
+ 
+  Current directory is: D:\cge\pracge\ant\command\TARFCUT
+  
+ 
+  Full path name of running EXE is: D:\cge\pracge\ant\model\oranig.exe
+  Fortran compiler = GF64   version 6.4.0 64 bit
+  BLAS library: OpenBlas
+  OPENMP number of threads: 12
+  Gempack source corresponds to revision 907.
+  Operating System is Microsoft Windows 11 Pro
+ 
+ 
+  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 
+ 
+                    TABLO-GENERATED PROGRAM OPTIONS
+               ( --> indicates those in effect )
+ 
+       BAT Run in batch              STI Take inputs from a Stored-input file
+       BPR Brief prompts             SIF Store inputs on a file
+       LOG Output to log file        ASI Add to incomplete Stored-input file
+                                     CMF Take inputs from a Command file
+       EAA Echo all activity           SVX Select variables on XAC file (later)
+   --> CPU Report CPU times            RQF Required figures agreement (extrap)
+       NRP Don't reuse pivots        NIR Don't do solution iterative refinement
+                                 --> IZ1 Ignore zero coefficients in step 1
+                                     KZ2 Keep zero coefficients in steps 2,3 etc
+       NEQ Do no equations           NWE Don't warn how well equations solved
+       NDS Do no displays            SSI Several subintervals; extrap after each
+       NWR Do no writes              M28 Use MA28 routines (rather than MA48)
+       NAS Do no assertions          SUI Save updated formula(initial) data
+       NUD Do no final updates              Extra Options Screen
+       NSM Don't do simulation              --------------------
+       NWT Use Newton's method      DTO Display, Terminal/Text write Options
+       CR  Check-on-read options
+ 
+  Select an option   :  <opt>      Deselect an option      : -<opt>
+  Help for an option : ?<opt>      Help on all options     : ??
+  Redisplay options  : /           Finish option selection : Carriage return
+  
+ 
+  %% UNABLE TO OPEN FILE 'tarfuct.cmf'.
+   It seems that the file does not exist.
+ 
+ (ERROR RETURN FROM ROUTINE:TGCOP )
+ (E-Unable to open Command file)
+ 
+  (The program terminated with an error.)
+  (The program has completed without warnings.)
+  
+  Total elapsed time is:  4 seconds.
+
+ This run ended at 11:46:28 on 22-JUN-2026

@@ -1,0 +1,50 @@
+LTG command line: C:\GP\ltg.bat oranig
+
+[C:\GP\gptask.exe]
+[GPTASK 15 August 2011. Parameters: gfortran oranig ]
+
+GNU Fortran (x86_64-posix-seh-rev0, Built by MinGW-W64 project) 6.4.0
+Copyright (C) 2017 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Running up to 12 compiles at once, with each compile doing up to 3 files.
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_c11.for" "oranig_c12.for" "oranig_u11.for"
+Launched slot 2: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_u12.for" "oranig_v1.for" "oranig__14.for"
+Launched slot 3: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig__28.for"
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_c1.for" "oranig_c31.for" "oranig_c32.for"
+Launched slot 4: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_c51.for" "oranig_c52.for" "oranig_c61.for"
+Launched slot 5: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_c62.for" "oranig_u31.for" "oranig_u51.for"
+Launched slot 6: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_u61.for"
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_c3.for"
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_u1.for" "oranig_u32.for" "oranig_u52.for"
+Launched slot 2: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_u62.for" "oranig_v3.for" "oranig_v5.for"
+Launched slot 3: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_v6.for" "oranig__32.for" "oranig__33.for"
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_u3.for" "oranig_u5.for" "oranig__34.for"
+Launched slot 2: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_u6.for"
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_u0.for"
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_v0.for"
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_c5.for" "oranig_c6.for"
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_c0.for" "oranig__2.for" "oranig__3.for"
+Launched slot 2: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig__4.for" "oranig__5.for" "oranig__6.for"
+Launched slot 3: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig__7.for" "oranig__8.for" "oranig__9.for"
+Launched slot 4: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig__10.for" "oranig__11.for" "oranig__12.for"
+Launched slot 5: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig__13.for" "oranig__15.for" "oranig__16.for"
+Launched slot 6: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig__17.for" "oranig__18.for" "oranig__19.for"
+Launched slot 7: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig__20.for" "oranig__21.for" "oranig__22.for"
+Launched slot 8: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig__23.for" "oranig__24.for" "oranig__25.for"
+Launched slot 9: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig__26.for" "oranig__27.for" "oranig__29.for"
+Launched slot 10: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig__30.for" "oranig__31.for" "oranig__35.for"
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig_m0.for"
+Launched slot 1: gfortran -I "C:\GP\includes" -I "C:\GP\modules" @optin_1 "oranig__1.for"
+Finished OK 32.5 seconds 28 separate tasks
+
+D:\cge\pracge\ant\model>gfortran  @optgf_3 @gfortran_link_ltg.fig -Wl,--start-group -lgpa -lgpb -ltbgdum -lmodlib -lgs -Wl,--end-group -L"C:\GP" -L.\ -lopenblas -lgomp -lpthread -o oranig.exe 
+[C:\GP\gptask.exe]
+[GPTASK 15 August 2011. Parameters: cleangf oranig deletefor]
+start time = 11:14:10.62       end time = 11:14:58.01             
+
+
+oranig.EXE made successfully
+
+
