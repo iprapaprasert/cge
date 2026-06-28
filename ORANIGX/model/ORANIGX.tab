@@ -3,18 +3,22 @@
                                                                                 
 ! Additions 
 ! March 2026 Add Microsimulation part
-! March 2026 Add Excerpt 56 - Government budget balance                         
-! March 2026 Add Excerpt 54 - Decomposition of direct tax revenue               
-! March 2026 Add household income excerpt
-    (1) Add Excerpt 52 - Household income: previously, all household get        
-        same income equal to factor payments. But this excerpt heterogenize     
-        household income (each household does not receive factor payments       
-        equally) and add more variables such as transfer, other government      
-        income, income tax to make hh income more realistic                     
-    (2) Move old excerpt 52 Linking household consumption to post-tax           
-        income to 53 and change definition of household income
-    (3) Move old excerpt 53 (EV and CV) to excerpt 54                           
-! April 2012 Extensions of ORANIG resembles of PHILGEM                            
+! March 2026 Add Excerpt 56 - Government budget balance  
+    and Excerpt 57 - Government revenue neutrality                              
+! March 2026 Major change the excerpt from NEWEQ by 
+    (1) Introduce Excerpt 52 - Household income 
+        - Add transfer from govt, whougov
+        - Introduce income from wage / business as share of income for
+            each household
+    (2) Modify Excerpt 53 - Linking household consumption to post-tax income    
+        - Add govt other income (delVOGINC) in government revenue 
+        - Rename whhincptax to wdispinc 
+        - Calculate real variables
+    (3) Add Excerpt 54 - Decomposition of household income and direct tax
+        - Decompose VINCHOU into VPERSONINCH + VCORPINCH and 
+            decompose VDIRTAXH into VPITH + VCITH
+    (4) Moves CV/EV to Excerpt 55                                               
+! April 2012 Extensions of ORANIG resembles of PHILGEM                          
     (1) Multiple households (Extension of Excerpt 16)                           
         - Materials from PHILGEM and MULTHOUS extension                         
         - Diff from MULTHOUS is to use notation EPSH instead of EPS and         
@@ -25,7 +29,6 @@
     (3) Add more assertion in Excerpt 37 (and also comment out EPSTOT related   
         equation and assertion)       
     (4) Add Excerpt 57 - Government revenue neutrality                          
-!
 ! April 2005 Add EV and CV in Excerpt 53 !                                      
 ! PRACGE course - NEWEQ                                                         
     Add Excerpt 52 - Linking household consumption to post-tax income           
@@ -813,8 +816,10 @@ Variable
  (all,c,COM)(all,s,SRC) f5(c,s) # Government demand shift #;
  (change) (all,c,COM)(all,s,SRC)  fx6(c,s)    # Shifter on rule for stocks #;
 Equation
- E_x5 # Government demands # (all,c,COM)(all,s,SRC) x5(c,s) = f5(c,s) + f5tot;
- E_f5tot # Overall government demands shift # f5tot = x3tot + f5tot2;
+    E_x5 # Government demands # (all,c,COM)(all,s,SRC) 
+        x5(c,s) = f5(c,s) + f5tot;
+    E_f5tot # Overall government demands shift # 
+        f5tot = x3tot + f5tot2;
 ! note: normally ONE of f5tot and f5tot2 is exogenous
  f5tot2 exogenous gives x5(c,s) = f5(c,s) + x3tot   ...gov follows hou
  f5tot  exogenous gives x5(c,s) = f5(c,s) + f5tot   ...gov exog !
@@ -2475,103 +2480,106 @@ Write LABSHR to file SUMMARY header "SHLB"
 
 ! Excerpt 52 of TABLO input file: !
 ! Household income !
+! Rename LBSH to WASH / CPSH to BZSH / delVTRANSF to delVHOUGOV to avoid confusion!
+! In mechanical closure, exogenous wagshrh, busshrh, delVHOUGOV !
 Coefficient 
-    (all,i,IND)(all,o,OCC)(all,h,HOU) VLABSHRH(i,o,h) # Labor income share #;
-    (all,i,IND)(all,h,HOU) VCAPSHRH(i,h) # Capital and land income share #;
+    (all,i,IND)(all,o,OCC)(all,h,HOU) VWAGSHRH(i,o,h) # Income from wage share #;
+    (all,i,IND)(all,h,HOU) VBUSSHRH(i,h) # Income from business share #;
     (all,i,IND)(all,o,OCC)(all,h,HOU) V1LABH(i,o,h) # Labor income #;
     (all,i,IND)(all,h,HOU) V1CAPH(i,h) # Capital income #;
     (all,i,IND)(all,h,HOU) V1LNDH(i,h) # Land income #;
-    (all,h,HOU) VTRANSF(h) # Transfer to household #;
-    (all,h,HOU) VHHINCH(h) # Household income #;
+    (all,h,HOU) VHOUGOV(h) # Transfer to household #;
+    (all,h,HOU) VINCHOU(h) # Household income #;
 Variable
-    (all,i,IND)(all,o,OCC)(all,h,HOU) labshrh(i,o,h) # Labor income share #;
-    (all,i,IND)(all,h,HOU) capshrh(i,h) # Capital and land income share #;
-    (all,i,IND) w1cap(i) # Payments to capital by industry #;
+    (all,i,IND)(all,o,OCC)(all,h,HOU) wagshrh(i,o,h) # Income from wage share #;
+    (all,i,IND)(all,h,HOU) busshrh(i,h) # Income from business share #;
+    (all,i,IND) w1cap(i) # Payment to capital by industry #;
     (all,i,IND) w1lnd(i) # Payment to land by industry #;
-    (change) (all,h,HOU) delVTRANSF(h) # Transfer to household #;
-    (all,h,HOU) whhinch(h) # Household income #;
+    (change) (all,h,HOU) delVHOUGOV(h) # Transfer from government to household #;
+    (all,h,HOU) winchou(h) # Household income #;
 Read 
-    VLABSHRH from file BASEDATA header "LBSH";
-    VCAPSHRH from file BASEDATA header "CPSH";
+    VWAGSHRH from file BASEDATA header "WASH";
+    VBUSSHRH from file BASEDATA header "BUSH";
 Formula
-    (all,i,IND)(all,o,OCC)(all,h,HOU) V1LABH(i,o,h) = V1LAB(i,o)*VLABSHRH(i,o,h);
-    (all,i,IND)(all,h,HOU) V1CAPH(i,h) = V1CAP(i)*VCAPSHRH(i,h);
-    (all,i,IND)(all,h,HOU) V1LNDH(i,h) = V1LND(i)*VCAPSHRH(i,h);
-    (initial) (all,h,HOU) VTRANSF(h) = 0;
-    (all,h,HOU) VHHINCH(h) = sum{i,IND, 
+    (all,i,IND)(all,o,OCC)(all,h,HOU) V1LABH(i,o,h) = V1LAB(i,o)*VWAGSHRH(i,o,h);
+    (all,i,IND)(all,h,HOU) V1CAPH(i,h) = V1CAP(i)*VBUSSHRH(i,h);
+    (all,i,IND)(all,h,HOU) V1LNDH(i,h) = V1LND(i)*VBUSSHRH(i,h);
+    (initial) (all,h,HOU) VHOUGOV(h) = 0;
+    (all,h,HOU) VINCHOU(h) = sum{i,IND, 
         sum{o,OCC, V1LABH(i,o,h)} + V1CAPH(i,h) + V1LNDH(i,h)} 
-        + VTRANSF(h);
+        + VHOUGOV(h);
 Update
-    (all,i,IND)(all,o,OCC)(all,h,HOU) VLABSHRH(i,o,h) = labshrh(i,o,h);
-    (all,i,IND)(all,h,HOU) VCAPSHRH(i,h) = capshrh(i,h);
-    (change) (all,H,HOU) VTRANSF(h) = delVTRANSF(h);
+    (all,i,IND)(all,o,OCC)(all,h,HOU) VWAGSHRH(i,o,h) = wagshrh(i,o,h);
+    (all,i,IND)(all,h,HOU) VBUSSHRH(i,h) = busshrh(i,h);
+    (change) (all,H,HOU) VHOUGOV(h) = delVHOUGOV(h);
 Equation
     E_w1cap # Payments to capital by industry # (all,i,IND) 
         V1CAP(i)*w1cap(i) = V1CAP(i)*[x1cap(i) + p1cap(i)];
     E_w1lnd # Payments to land by industry # (all,i,IND)
         ID01[V1LND(i)]*w1lnd(i) = V1LND(i)*[x1lnd(i) + p1lnd(i)];
-    E_whhinch # Household income # (all,h,HOU)
-        VHHINCH(h)*whhinch(h) = 
+    E_winchou # Household income # (all,h,HOU)
+        VINCHOU(h)*winchou(h) = 
         sum{i,IND,
-            sum{o,OCC,V1LABH(i,o,h)*[x1lab(i,o) + p1lab(i,o) + labshrh(i,o,h)]} 
-            + V1CAPH(i,h)*[w1cap(i) + capshrh(i,h)] 
-            + V1LNDH(i,h)*[w1lnd(i) + capshrh(i,h)]
-        } + 100*delVTRANSF(h); 
+            sum{o,OCC,V1LABH(i,o,h)*[x1lab(i,o) + p1lab(i,o) + wagshrh(i,o,h)]} 
+            + V1CAPH(i,h)*[w1cap(i) + busshrh(i,h)] 
+            + V1LNDH(i,h)*[w1lnd(i) + busshrh(i,h)]
+        } + 100*delVHOUGOV(h); 
 
 ! Excerpt 53 of TABLO input file: !
 ! Linking household consumption to post-tax income !
 ! There are 5 equations determine 6 variables, 1 must be exogenous, usually is dtaxrateh  !
+! Modify from original by using VINCHOU(h) instead of V1PRIM_I 
+    and winchou(h) instead of w1prim_i !
+! In mechanical closure, exogenous f3toth, f3tot_h, delVOGINC !
 Coefficient
-    (all,h,HOU) VDIRTAXH(h) # Revenue from direct taxation #;
-    (all,h,HOU) VINCPTAXH(h) # Post-tax factor income #;
     VTAXTOT # Government revenue #;
-    VOGIN # Other government income #;
+    (all,h,HOU) VDIRTAXH(h) # Revenue from direct taxation #;
+    VOGINC # Other government income #;
+    (all,h,HOU) VDISPINC(h) # Disposable income #;
 Variable
+    (orig_level=VTAXTOT) wtaxtot # Government revenue #;
     (orig_level=VDIRTAXH) (all,h,HOU) wdirtaxh(h) # Revenue from direct taxation #;
     (all,h,HOU) dtaxrateh(h) # % Change in ad valorem direct tax rate #;
-    (orig_level=VTAXTOT) wtaxtot # Government revenue #;
-    (all,h,HOU) wincptaxh(h) # Post-tax factor income #;
-    (all,h,HOU) f3inch(h) # Ratio: [household consumption]/[post-tax factor income] #;
+    (change) delVOGINC # Other government income #;
+    (all,h,HOU) wdispinc(h) # Disposable income #;
+    (all,h,HOU) f3toth(h) # Ratio: [household consumption]/[disposable income] #;
+    f3tot_h # Overall shifter for consumption #;
     (all,h,HOU) realwagepth(h) # Average post-tax real wage #;
-    (change) delVOGIN # Other governement income #;
-    (change) delVTAXTOT # Government revenue #;
-Read VDIRTAXH from file BASEDATA header "DTXH";
+    (all,h,HOU) xinchou(h) # Real household income #;
+    (all,h,HOU) xdispinc(h) # Real post-tax household income #;
+Read 
+    VDIRTAXH from file BASEDATA header "DTXH";
+Formula 
+    (initial) VOGINC = 0; 
+    VTAXTOT = sum{h,HOU, VDIRTAXH(h)} + V0TAX_CSI + VOGINC;
+    (all,h,HOU) VDISPINC(h) = VINCHOU(h) - VDIRTAXH(h);
 Update 
     (all,h,HOU) VDIRTAXH(h) = wdirtaxh(h);
-    (change) VOGIN = delVOGIN;
-
-! Modify from original by using VHHINCH(h) instead of V1PRIM_I 
-    and whhinch(h) instead of w1prim_i !
-
-Formula 
-    (all,h,HOU) VINCPTAXH(h) = VHHINCH(h) - VDIRTAXH(h);
-    (initial) VOGIN = 0; 
-    VTAXTOT = sum{h,HOU, VDIRTAXH(h)} + V0TAX_CSI + VOGIN ;
-
+    (change) VOGINC = delVOGINC;
 Equation
-    E_wdirtaxh # Revenue from direct taxation # (all,h,HOU)
-        wdirtaxh(h) = whhinch(h) + dtaxrateh(h);
-    E_wincptaxh # Post-tax factor income # (all,h,HOU)
-        VINCPTAXH(h)*wincptaxh(h) = VHHINCH(h)*whhinch(h) - VDIRTAXH(h)*wdirtaxh(h);
     E_wtaxtot # Government revenue #
-        VTAXTOT*wtaxtot = sum{h,HOU, VDIRTAXH(H)*wdirtaxh(h)} + V0TAX_CSI*w0tax_csi + 100*delVOGIN;
-    E_f3inch # Household consumption proportional to post-tax factor income #
-        (all,h,HOU) w3toth(h) = wincptaxh(h) + f3inch(h);
+        VTAXTOT*wtaxtot = sum{h,HOU, VDIRTAXH(H)*wdirtaxh(h)} 
+            + V0TAX_CSI*w0tax_csi + 100*delVOGINC;
+    E_wdirtaxh # Revenue from direct taxation # (all,h,HOU)
+        wdirtaxh(h) = winchou(h) + dtaxrateh(h);
+    E_wdispinc # Disposible income # (all,h,HOU)
+        VDISPINC(h)*wdispinc(h) = VINCHOU(h)*winchou(h) - VDIRTAXH(h)*wdirtaxh(h);
+    E_f3toth # Household consumption proportional to disposable income #
+        (all,h,HOU) w3toth(h) = wdispinc(h) + f3toth(h) + f3tot_h;
     E_realwagepth # Average post-tax real wage # (all,h,HOU)
-        VINCPTAXH(h)*realwagepth(h) = VINCPTAXH(h)*realwage - VDIRTAXH(h)*dtaxrateh(h);
+        VDISPINC(h)*realwagepth(h) = VDISPINC(h)*realwage - VDIRTAXH(h)*dtaxrateh(h);
+    E_xinchou # Real household income # (all,h,HOU)
+        xinchou(h) = winchou(h) - p3toth(h);
+    E_xdispinc # Real post-tax household income # (all,h,HOU)
+        xdispinc(h) = wdispinc(h) - p3toth(h);
 
 ! Excerpt 54 of TABLO input file: !
-! Decomposition of direct tax revenue !
-! Rather than the direct tax revenue is determined from household income
-    and direct tax rate (dtaxrateh exogenous). We can make it more realistic by
-    decomposes the direct tax into personal income and corporate income. !
-! Hence, this excerpt is all about decomposition of direct tax revenue into
-    personal income tax and corporate income tax !
-! Technically, we let the dtaxrate endogenous, pitrateh and citrateh exogenous !
-! There are 5 equations determine 6 variables, 1 must be exogenous !
-! Combined with 53, usually we endogenize dtaxrateh. Then, we can exogenize 
-    2 variables in excerpt 54 - pitrateh, citrateh !
-! Suppose that originally citrateh is exogenized!
+! Decomposition of household income and direct tax !
+! Decompose VINCHOU into VPERSONINCH + VCORPINCH and
+    decompose VDIRTAXH into VPITH + VCITH !
+! In mechanical closure, exogenous citrateh !
+! Technically, we would like pitrateh also exogenous. 
+    Hence, we let the dtaxrate endogenous and exogenous pitrateh instead !
 Coefficient
     (all,h,HOU) VPITH(h) # Personal income tax #;
     (all,h,HOU) VCITH(h) # Corporate income tax #;
@@ -2596,7 +2604,7 @@ Formula
     (all,h,HOU) VCORPINCH(h) = VCITH(h)/VCITRATEH(h); 
 Equation
     E_personinch # Personal income # (all,h,HOU) 
-        VHHINCH(h)*whhinch(h) = [VHHINCH(h) - VCORPINCH(h)]*personinch(h) 
+        VINCHOU(h)*winchou(h) = [VINCHOU(h) - VCORPINCH(h)]*personinch(h) 
                                 + VCORPINCH(h)*corpinch(h);
     E_corpinch # Corporate income # (all,h,HOU) 
         corpinch(h) = personinch(h);
@@ -2643,23 +2651,23 @@ Equation
 
 ! Excerpt 55 of TABLO input file: !
 ! Equivalent variation and compensating variation !
+Coefficient (all,h,HOU) LUXREALH(h) # current V3LUX_C deflated by pfrisch #; 
 Variable 
     (change) EV # Equivalent variation #;
     (change)(all,h,HOU) EVH(h) # Equivalent variation of each househ #;
-Coefficient (all,h,HOU) LUXREALH(h) # current V3LUX_C deflated by pfrisch #; 
 Formula (initial) (all,h,HOU) LUXREALH(h) = V3TOTH(h)/ABS[FRISCHH(h)]; 
 Update (change) (all,h,HOU) LUXREALH(h) = EVH(h); 
 Equation 
     E_EVH (all,h,HOU) 100*EVH(h) = LUXREALH(h)*[utilityh(h) + qh(h)];
     E_EV EV = sum{h,HOU,EVH(h)};
 
+Coefficient
+    (all,h,HOU) V3LUXH_C(h) # Total luxury expenditure #; 
+    (all,h,HOU) UFKH(h)     # initial V3LUX_C updated by pFrisch #; 
 Variable 
     (all,h,HOU) pfrischh(h) # Marginal budget shares price index #;
     (change) CV # Compensating variation #;
     (change)(all,h,HOU) CVH(h);
-Coefficient
-    (all,h,HOU) V3LUXH_C(h) # Total luxury expenditure #; 
-    (all,h,HOU) UFKH(h)     # initial V3LUX_C updated by pFrisch #; 
 Formula  
     (all,h,HOU) V3LUXH_C(h) = V3TOTH(h)/ABS[FRISCHH(h)]; 
     (initial)(all,h,HOU) UFKH(h) = V3LUXH_C(h); 
@@ -2692,18 +2700,26 @@ Equation
 ----------------------------------------------------------------------------!]]!
 
 ! Excerpt 56 of TABLO input file: !
-! Government budget balance !
-Variable (change)
-    delBudget # Government budget balance #; 
-Equation E_delBudget # Government budget balance #
-    100*delBudget = VTAXTOT*wtaxtot - V5TOT*w5tot;
+! Government expenditure and savings !
+Coefficient
+    VCURGOV # Current government expenditure #; 
+Variable 
+    wcurgov # Current government expenditure #;
+    (change) delSAVGOV # Government savings #; 
+Formula
+    VCURGOV = V5TOT + sum{h,HOU,VHOUGOV(h)};
+Equation 
+    E_wcurgov # Current government expenditure #
+        VCURGOV*wcurgov = V5TOT*w5tot + sum{h,HOU,100*delVHOUGOV(h)};
+    E_delSAVGOV # Government savings #
+        100*delSAVGOV = VTAXTOT*wtaxtot - VCURGOV*wcurgov;
 
-! Excerpt 56 of TABLO input file: !
+! Excerpt 57 of TABLO input file: !
 ! Government revenue neutrality !
 Variable (change)
-    rtaxtot # Real government #; 
+    rtaxtot # Real government revenue #; 
 Equation 
-    E_rtaxtot # Total real tax #
+    E_rtaxtot # Real government revenue #
         rtaxtot = wtaxtot - p5tot;
 
 ! end of file !
