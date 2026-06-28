@@ -1,0 +1,103 @@
+!------------------------------------------------------------------------------!
+!                  Command file for ORANIGX model                              !
+! Additions 
+! (4) Excerpt 54 - Decomposition of direct tax revenue
+!   add exogenous citrateh
+! (3) Excerpt 53 - Linking household consumption to post-tax income  
+!   add exogenous dtaxrateh delVOGINC f3toth f3tot_h
+! (2) Excerpt 52 - Household income 
+!   add exogenous wagshrh busshrh delVHOUGOV
+! (1) Given multiple households, change w3lux to w3luxh, x1tot to x1toth
+!   and q to qh      
+!------------------------------------------------------------------------------!                                                               
+
+check-on-read elements = warn; ! very often needed
+cpu = yes ; ! (Optional) Reports CPU times for various stages
+log file = yes;  ! Optional
+auxiliary files = ORANIGX; ! needed by GEMSIM
+
+! Solution method
+Method = GRAGG;
+Steps = 2 4 6;
+
+! Data and summary file
+File BASEDATA = ..\model\basedata.har ;
+Updated File BASEDATA =<cmf>.upd;
+File SUMMARY  = <cmf>sum.har;
+
+! Set investment behavior for each set of industries
+Xset EXOGINV  # aggregated-investment driven investment industries #
+    (ElecGasWater, Construction, FinanceInsur, OwnerDwellng,
+     PropBusSrvc, GovAdminDfnc, Education, HealthCommun);
+Xsubset EXOGINV is Subset of IND;
+Xset ENDOGINV # profit-driven investment industries # = IND - EXOGINV;
+
+! Mechanical closure !
+! Supply-side shock
+Exogenous x1cap x1lnd capslack a1cap a1lab_o a1lnd a1prim a1tot a2tot f1lab_io;
+! Demand-side shock
+Exogenous w3luxh invslack f5 f5tot2 fx6;
+! Foreign shock
+Exogenous pf0cif f4p f4q f4p_ntrad f4q_ntrad;
+! Tax shock
+Exogenous delPTXRATE f0tax_s f1tax_csi f2tax_csi f3tax_cs f5tax_cs t0imp 
+    f4tax_trad f4tax_ntrad f1oct;
+! Investment behavior
+Exogenous x2tot;
+! Household
+Exogenous qh a3_s;
+! Numeraire
+Exogenous phi;
+! Exogenous variables for regional extension
+Exogenous freg1 freg2 freg3 freg4 freg5 freg6;
+Exogenous rsum1 rsum2 rsum3 rsum4 rsum5 rsum6;
+
+! Extension
+! Household income shock
+Exogenous wagshrh busshrh delVHOUGOV f3toth f3tot_h;
+! Government revenue shock
+Exogenous dtaxrateh delVOGINC citrateh;
+
+Rest Endogenous;
+
+! Short-run closure !
+Swap realwage = f1lab_io;
+Swap x3toth = w3luxh;
+Swap x2tot_i = invslack;
+Swap x5tot = f5tot2; ! total government consumption is fixed
+Swap delx6 = fx6;
+Swap finv1(ENDOGINV) = x2tot(ENDOGINV); ! investment driven by profitability
+Swap finv2(EXOGINV) = x2tot(EXOGINV); ! investment follows aggregated investment
+
+! Long-run closure !
+!Swap gret = x1cap;
+!Swap employ_i = f1lab_io;
+!Swap delB = w3lux ;
+!Swap delx6 = fx6;
+!Swap finv3(ENDOGINV) = x2tot(ENDOGINV); ! investment follows existing capital
+!Swap finv2(EXOGINV) = x2tot(EXOGINV); ! investment follows aggregated investment
+
+! Additional closure !
+!Swap f5tot = f5tot2; ! shock to all government consumption on commodity c from source s
+
+! Excerpt 53 - linking household consumption to post-tax income closure 
+!Swap realwagepth = realwage; ! make labor supply respond to post-tax real wage instead of real wage
+!Swap wtaxtot = dtaxrateh; ! let the government revenue fix, and direct tax rate moves to make up for lost tariff revenue
+Swap f3toth = x3toth; ! instead of fixed MPC, let the household consumption moves with change in post-tax income 
+
+! Excerpt 54 - Decomposition of direct tax revenue
+Swap pitrateh = dtaxrateh ! exogenous pitrateh, consistent to citrateh
+
+! Excerpt 56 - Government expenditure and savings
+Swap delSAVGOV = f5tot2; ! fixed budget balance
+
+Verbal Description = Short-run effect of cutting tariff rate 
+    of ClothingFtw by 10% in modified closure;
+
+Extrapolation Accuracy File = yes;
+
+Shock t0imp("ClothingFtw") = -10; ! cut tariff rate of ClothingFtw by 10%
+
+!final_level citrateh = uniform 0.15;  !shock cit rate to be 15% universally
+
+! end of command file !
